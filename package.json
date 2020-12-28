@@ -1,0 +1,22 @@
+{
+  "name": "chatsystem",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IliyanTachev/ChatSystem.git"
+  },
+  "author": "Iliyan Tachev and Hristiyan Tachev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IliyanTachev/ChatSystem/issues"
+  },
+  "homepage": "https://github.com/IliyanTachev/ChatSystem#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
