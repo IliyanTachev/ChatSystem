@@ -1,0 +1,33 @@
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="./bower_components/jquery/dist/jquery.js"></script>
+    <link href="./bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link rel="stylesheet"  type="text/css" href="/styles/main.css"/>
+</head>
+<body>
+    <!-- <div id="login">
+        <div class="control">
+            <section>
+                <br><label>Email</label><br>
+                <input type="text" id="logInEmail">
+            </section>
+        </div>
+        <div class="control">
+            <section>
+                <label>Password</label><br>
+                <input type="password" id="logInPassword">
+            </section>
+        </div>
+    </div> -->
+
+    <form id="loginForm" action="/login" method="POST">
+        <input type="text" placeholder="Enter email" name="email"/>
+        <input type="password" placeholder="Enter password" name="password"/>
+        <input type="submit" value="LogIn">
+    </form>
+<button id="logInButton" class="control shadow p-3 mb-5 bg-purple rounded">Log In</button>
+</body>
+</html>

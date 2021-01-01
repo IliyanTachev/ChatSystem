@@ -1,0 +1,42 @@
+* {
+    box-sizing: border-box;
+}
+  
+html {
+    font-family: sans-serif;
+}
+
+label {
+    font-weight: bold;
+    color: #494949;
+}
+
+input {
+    font: inherit;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    color: #494949;
+    display: block;
+    margin: 1rem 0;
+}
+
+input:focus {
+    outline: none;
+    border-color: #ff0062;
+}
+
+.inline-controls {
+    display: flex;
+}
+
+.control {
+    margin: 1rem;
+}
+
+button {
+    border: 2px solid #000000;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    background: #ff0062;
+}
