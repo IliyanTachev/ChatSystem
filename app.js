@@ -33,7 +33,7 @@ app.post('/login', function(req, res){
   let queryString = "";
 
   const loginResult =  login({'email': req.body.email, 'password': req.body.password}, accountList);
-
+  
   if(!loginResult) queryString = "?" + "status=error";
   else loggedAccount = {...loginResult};
 
