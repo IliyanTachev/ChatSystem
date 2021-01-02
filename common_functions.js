@@ -9,3 +9,8 @@ function clearInputFields(...inputValues){
         input.value = "";
     }
 }
+
+module.exports = {
+    isValidEmail, 
+    clearInputFields
+}

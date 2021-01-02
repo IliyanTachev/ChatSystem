@@ -1,19 +1,23 @@
-const express = require('express');
 const port = 3000;
 
-const app = express();
+var express = require('express');
+var app = express();
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
+var url  = require('url');
+
 var path = require('path');
 const Account = require('./entities/account.js');
 const login = require('./login.js').login;
 const register = require('./register.js').createAccount;
 
 app.set("views", "views");
-app.set("view engine", "html");
+app.set("view engine", "ejs");
 app.use(express.static('public'));
 app.use(express.urlencoded());
 
 // Users List
-let accountList = [{email: 'iliqn@gmail.com', password: '12345'}];
+let accountList = [{email: 'iliqn', password: '123', username: 'iliyant.'}];
 let loggedAccount = null;
 
 app.get('/', function(req, res){
@@ -37,15 +41,35 @@ app.post('/login', function(req, res){
 })
 
 app.get('/register', function(req, res){
-  const registerResult = register(req.body);
-  if(registerResult.status == "succcess") res.redirect("/login");
+  res.sendFile(__dirname + "/public/register.html");
+})
+
+app.post("/register", function(req, res){
+  const registerResult = register(req.body, accountList);
+ 
+  if(registerResult.status == "success") res.redirect("/");
   else res.sendFile(__dirname + "/public/register.html");
 })
 
 app.get('/chat', function(req, res){
-  res.render("views/chat.html");
+  res.render('chat', {user : loggedAccount});
 })
 
-app.listen(port, function(){
+io.on('connection', (socket) => {
+  console.log("new user connected");
+
+  socket.on('chat-message', (msg) => {
+    console.log('message: ' + msg);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+})
+
+
+
+
+http.listen(port, function(){
   console.log("Server started on port " + port + "...");
 })

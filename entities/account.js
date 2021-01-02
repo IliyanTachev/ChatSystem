@@ -1,15 +1,15 @@
 class Account{
     firstName;
     lastName;
-    userName;
+    username;
     email;
     password;
     friendList;
 
-    constructor(firstName, lastName, userName, email, password) {
+    constructor(firstName, lastName, username, email, password) {
          this.firstName = firstName;
          this.lastName = lastName;
-         this.userName = userName;
+         this.username = username;
          this.email = email;
          this.password = password;
          this.friendList = [];

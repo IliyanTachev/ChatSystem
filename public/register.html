@@ -7,14 +7,13 @@
         <link href="./bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     </head>
     <body>
-
         <div id="register"> 
-            <form action="/register">
-                <input type="text" name="first_name" placeholder="Enter first name">
-                <input type="text" name="last_name" placeholder="Enter last name">
-                <input type="text" name="user_name" placeholder="Enter username">
-                <input type="text" name="email" placeholder="Enter email">
-                <input type="password" name="password" placeholder="Enter password">
+            <form action="/register" method="POST">
+                <input type="text" name="firstName" placeholder="Enter first name" value="Pesho">
+                <input type="text" name="lastName" placeholder="Enter last name" value="Petrov">
+                <input type="text" name="username" placeholder="Enter username" value="peshkata45">
+                <input type="text" name="email" placeholder="Enter email" value="pesho@gmail.com">
+                <input type="password" name="password" placeholder="Enter password" value="123secretkey">
                 <input type="submit" value="Create Account"> 
             </form>
         </div>
