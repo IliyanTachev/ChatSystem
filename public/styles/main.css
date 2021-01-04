@@ -44,17 +44,13 @@ button {
 body {
     padding-top:4.2rem;
     padding-bottom:4.2rem;
-    background:rgba(0, 0, 0, 0.76);
+    background:rgba(0, 0, 0, 0.76) !important;
 }
 
 a {
     text-decoration:none !important;
 }
-/*
-h1,h2,h3{
-    font-family: 'Kaushan Script', cursive;
-}
-*/
+
 .myform{
     position: relative;
     display: -ms-flexbox;
