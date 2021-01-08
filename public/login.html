@@ -3,17 +3,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <script src="./bower_components/jquery/dist/jquery.js"></script>
-    <link href="./bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <link rel="stylesheet"  type="text/css" href="/styles/main.css"/>
 </head>
 <body>
-    <form id="loginForm" action="/login" method="POST">
+    <form id="loginForm" action="/auth/login" method="POST">
         <input type="text" placeholder="Enter email" name="email"/>
         <input type="password" placeholder="Enter password" name="password"/>
         <input type="submit" value="LogIn">
     </form>
 <button id="logInButton" class="control shadow p-3 mb-5 bg-purple rounded">Log In</button>
-You don't have an account already? <a href="/register">Sign Up</a>
+You don't have an account already? <a href="/auth/register">Sign Up</a>
 </body>
 </html>

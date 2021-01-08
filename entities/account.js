@@ -4,7 +4,9 @@ class Account{
     username;
     email;
     password;
-    friendList;
+    friends;
+    isLogged;
+    sockedId;
 
     constructor(firstName, lastName, username, email, password) {
          this.firstName = firstName;
@@ -12,18 +14,19 @@ class Account{
          this.username = username;
          this.email = email;
          this.password = password;
-         this.friendList = [];
+         this.friends = [];
+         this.isLogged = false;
+         this.sockedId = null;
     }
 
     addFriend(friendAccount){
-        this.friendList.push(friendAccount);
+        this.friends.push(friendAccount);
     }
 
     removeFriend(friendAccount){
-        const indexToBeRomoved = this.friendList.indexOf(friendAccount);
-        this.friendList.splice(indexToBeRomoved, 1);
+        const indexToBeRomoved = this.friends.indexOf(friendAccount);
+        this.friends.splice(indexToBeRomoved, 1);
     }
-
 }
 
 module.exports = Account;

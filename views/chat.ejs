@@ -18,7 +18,13 @@
   </script>
 </head>
 <body>
-    <h1> Username: <%= user.username %> </h1>
+    <h1> Username: <%= loggedUser.username %> </h1>
+    People online:
+    <ul>
+      <% for (var user of onlineUsers) { %>
+              <li><button class="friend"><%= user.username %></button></li>
+      <% } %>
+    </ul>
     <form id="messageForm">
       <input type="text" name="message" placeholder="Enter message">
       <input type="submit" vlue="Submit">
