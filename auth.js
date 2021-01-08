@@ -38,7 +38,7 @@ router.post('/login', passport.authenticate('local'), async function(req, res){
 })
 
 router.get('/register', function(req, res){
-  res.render('register');
+  res.sendFile(__dirname + "/public/register.html");
 })
 
 router.post("/register", async function(req, res){
