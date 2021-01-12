@@ -10,6 +10,7 @@ const db = mysql.createConnection({
 db.connect(function(err){
   if(err) throw err;
   console.log('Database connected...');
+  database.resetSockets();
 });
 
 // Config
@@ -40,13 +41,16 @@ var database = {
     return new Promise((resolve, reject) => {
       db.query(sql, function(err, result){
         if(err) reject(err);
-        console.log("res[0] = " + result[0]);
         resolve(result[0]);
       });
     });
   },
-  findById: function(collectionName, id){
-    let sql = `select * from ${collectionName} where _id='${id}' limit 1`;
+  findById: function(collectionName, id, getColumns="*"){
+    let columns = "";
+    if(Array.isArray(getColumns)) columns = getColumns.join();
+    else columns = getColumns;
+    
+    let sql = `select ${columns} from ${collectionName} where _id='${id}' limit 1`;
    
     return new Promise((resolve, reject) => {
       db.query(sql, function(err, result){
@@ -66,7 +70,7 @@ var database = {
     });
   },
   findAllLoggedUsers: function(){
-    let sql = `select * from ${usersTableName} where is_logged='1'`;
+    let sql = `select * from ${usersTableName} where is_logged='1' and socket_id != 'NULL'`;
     
     let results = [];
     return new Promise((resolve, reject) => {
@@ -86,8 +90,27 @@ var database = {
         resolve();
       });
     });
+  }, 
+  setSocketId: function(userId, socketId){
+    let sql = `update users set socket_id='${socketId}' where _id='${userId}'`;
+
+    return new Promise(function (resolve, reject) {
+      db.query(sql, async function(err, result){
+        if(err) reject(err);
+        resolve();
+      });
+    });
+  },
+  resetSockets: function(){
+    let sql = `update users set socket_id='NULL' where _id>0`;
+
+    return new Promise(function (resolve, reject) {
+      db.query(sql, async function(err, result){
+        if(err) reject(err);
+        resolve();
+      });
+    });
   }
 }
-
 
 exports.database = database;

@@ -5,29 +5,142 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Chat</title>
+  <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
   <script src="/bower_components/jquery/dist/jquery.js"></script>
   <script>
-    var socket = io.connect('http://localhost:3000');
     jQuery(function(){
-      $("#messageForm").submit(function(e){
-        e.preventDefault();
-        socket.emit('chat-message', $('input[name="message"]').val());
+      var socket = io.connect('http://localhost:3000');
+      socket.emit('user_connected', $("h1").attr("data-id"));
+      socket.on('user_logged', (user) => {
+
+        if(!checkIfUserAlreadyAdded(user.username)){
+            updateOnlineUsers(user);
+        }
+
+        $(".friend").click(function(){
+            $("#chat-title > h4").text("Chatting with " + $(this).html());
+            $(".friend").removeClass("btn-success").addClass("btn-primary");
+            $(this).toggleClass("btn-primary btn-success");
+        });
       });
+
+      // Sending message
+      $("#send-msg-btn").click(function(){
+        let message = $('input[name="message"]').val();
+        $("input[name='message']").val(''); // Clear message field
+        $("#chat-body").append($("#loggedUser > #username").text() + ": ").append(message).append("<br/>"); // Append message to current user's chat window
+
+        socket.emit('chat-message', {
+          senderId: $("#loggedUser").attr("data-id"),
+          receiverId: $("button.friend.btn-success").attr("data-id"),
+          message
+        });
+      });
+
+      // Retrieving message
+      socket.on('chat-message', (data) => {
+        $("button.friend[data-id='" + data.senderId + "']").click();
+        $("#default-msg").remove();
+        let receiverUsername = $(".friend.btn-success").html();
+        let messageFormat = receiverUsername + ": " + data.message;
+        $("#chat-body").append("<p class='new-response'>" + messageFormat + "</p>").append("<br/>");
+      });
+
+      socket.on('seen', (data) => {
+        $(".chat-window .seen").remove();
+        $("#chat-body").append("<p class='seen' style='color: blue;'>seen</p><br/>");
+      });
+
+      function updateOnlineUsers(user){
+        let onlineUsersWrapper = $("#online-users");
+        $("#online-users > #default-li").remove();
+        let onlineUserLayout = '<li><button type="button" class="friend btn btn-primary" data-id="' + user.id + '">' + user.username + '</button></li>';
+        onlineUsersWrapper.append(onlineUserLayout);
+      }
+
+      function checkIfUserAlreadyAdded(username){
+        let onlineUsersElements = $("#online-users button");
+        for(let onlineUserElement of onlineUsersElements){
+           if(onlineUserElement.innerHTML == username) return true;
+        }
+
+        return false;
+      }
+
+      $(".chat-window").click(function(){
+        if(
+          $(".new-response").length &&
+          $(".friend.btn-success").length == 1
+          ) { // if any responses and if any chat is opened 
+          $(".new-response").removeClass("new-response").addClass("response");
+          socket.emit('seen', {receiverId: $("button.friend.btn-success").attr("data-id")});
+        }
+      });
+
     });
   </script>
+  <style>
+    .chat-window{
+      border: 1px solid black;
+      width: 50%;
+      margin: 0 auto;
+      height: 500px;
+      border: 4px solid black;
+    }
+
+    #chat-title{
+      border-bottom: 2px solid black;
+      padding: 10px;
+    }
+
+    #chat-body{
+      height: 70%;
+      padding: 10px;
+      border: 4px solid black;
+      overflow: scroll;
+    }
+
+    #chat-footer{
+      padding: 5px;
+      float: right;
+    }
+
+    #messageForm{
+      float: right;
+    }
+  </style>
 </head>
 <body>
-    <h1> Username: <%= loggedUser.username %> </h1>
+    <h1 id="loggedUser" data-id="<%= loggedUser._id %>"> Logged as: <p id="username"><%= loggedUser.username %> </p></h1>
     People online:
-    <ul>
-      <% for (var user of onlineUsers) { %>
-              <li><button class="friend"><%= user.username %></button></li>
-      <% } %>
+    <ul id="online-users">
+      <% if(onlineUsers.length != 0) { %>
+        <% for(let user of onlineUsers) { %>
+          <li> 
+            <button type="button" class="friend btn btn-primary" data-id="<%= user._id %>"><%= user.username %></button>
+          </li>
+        <% } %>
+      <% } else { %> <li id="default-li">No online users.</li> <% } %>
     </ul>
-    <form id="messageForm">
-      <input type="text" name="message" placeholder="Enter message">
-      <input type="submit" vlue="Submit">
+    
+    <div class="chat-window">
+      <div id="chat-title">
+        <h4>No active chat</h4>
+      </div>
+      <div id="chat-body"> 
+        <h5 id="default-msg">No messages</h5>       
+      </div>
+      <div id="chat-footer">
+          <input type="text" name="message" placeholder="Enter message">
+          <input id="send-msg-btn" type="submit" value="Send">
+      </div>
+    </div>
+
+
+
+    <form action="/auth/logout" method="POST">
+      <input type="submit" value="Logout">
     </form>
 </body>
 </html>

@@ -41,17 +41,31 @@ app.get('/', async function(req, res){
   });
 })
 
-// io.on('connection', (socket) => {
-//   console.log("new user connected -> " + socket.id);
+io.on('connection', (socket) => {
+  console.log("new user connected -> " + socket.id);
 
-//   socket.on('chat-message', (msg) => {
-//     console.log('message: ' + msg);
-//   });
+  socket.on('user_connected', async (userId) => {
+    await db.setSocketId(userId, socket.id);
+    let onlineUsers = await db.findAllLoggedUsers(); // to remove
+    let updatedUserUsername = (await db.findById("users", userId, ["username"]))[0].username; // retrieve username
 
-//   socket.on('disconnect', () => {
-//     console.log('user disconnected');
-//   });
-// })
+    io.emit('user_logged', {id: userId, username: updatedUserUsername});
+  });
+
+  socket.on('chat-message', async (data) => {
+    let receiver = (await db.findById("users", data.receiverId , ["socket_id"]))[0].socket_id; // retrieve socket_id
+    io.to(receiver).emit('chat-message', {senderId: data.senderId, message: data.message});
+  });
+
+  socket.on('seen', async (data) => {
+    let receiver = (await db.findById("users", data.receiverId , ["socket_id"]))[0].socket_id; // retrieve socket_id
+    io.to(receiver).emit('seen', {receiverId: data.receiverId});
+  });
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+})
 
 
 
