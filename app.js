@@ -1,72 +1,71 @@
 const port = 3000;
-
-var express = require('express');
-var app = express();
+const express = require('express');
+const app = express();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
-var url  = require('url');
-
-var path = require('path');
-const Account = require('./entities/account.js');
-const login = require('./login.js').login;
-const register = require('./register.js').createAccount;
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const ejs = require('ejs');
+const bodyParser = require('body-parser');
+const passport = require('passport');
+const authRouter = require('./auth');
+const db = require('./database').database;
 
 app.set("views", "views");
 app.set("view engine", "ejs");
 app.use(express.static('public'));
-app.use(express.urlencoded());
 
-// Users List
-let accountList = [{email: 'iliqn', password: '123', username: 'iliyant.'}];
-let loggedAccount = null;
+app.use(cookieParser());
+app.use(session({
+    secret: 'keyboard cat !@#',
+    resave: false,
+    saveUninitialized: true
+}));
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.get('/', function(req, res){
-  if(loggedAccount !== null) {
-    res.sendFile(__dirname + "/public/homepage.html");
-  }
-  else {
-    res.sendFile(__dirname + "/public/login.html");
-  }
-})
+app.use('/auth', authRouter);
 
-app.post('/login', function(req, res){
-  let queryString = "";
+app.use(function(req, res, next){ // isLogged
+  if(req.user !== undefined) next(); 
+  else res.redirect('/auth/login');
+});
 
-  const loginResult =  login({'email': req.body.email, 'password': req.body.password}, accountList);
-  
-  if(!loginResult) queryString = "?" + "status=error";
-  else loggedAccount = {...loginResult};
+app.get('/', async function(req, res){
+  let onlineUsers = await db.findAllLoggedUsers();
 
-  res.redirect('/' + queryString);
-})
-
-app.get('/register', function(req, res){
-  res.sendFile(__dirname + "/public/register.html");
-})
-
-app.post("/register", function(req, res){
-  const registerResult = register(req.body, accountList);
- 
-  if(registerResult.status == "success") res.redirect("/");
-  else res.sendFile(__dirname + "/public/register.html");
-})
-
-app.get('/chat', function(req, res){
-  res.render('chat', {user : loggedAccount});
+  res.render('chat', {
+    loggedUser: req.user[0],
+    onlineUsers
+  });
 })
 
 io.on('connection', (socket) => {
-  console.log("new user connected");
+  console.log("new user connected -> " + socket.id);
 
-  socket.on('chat-message', (msg) => {
-    console.log('message: ' + msg);
+  socket.on('user_connected', async (userId) => {
+    await db.setSocketId(userId, socket.id);
+    let onlineUsers = await db.findAllLoggedUsers(); // to remove
+    let updatedUserUsername = (await db.findById("users", userId, ["username"]))[0].username; // retrieve username
+
+    io.emit('user_logged', {id: userId, username: updatedUserUsername});
+  });
+
+  socket.on('chat-message', async (data) => {
+    let receiver = (await db.findById("users", data.receiverId , ["socket_id"]))[0].socket_id; // retrieve socket_id
+    io.to(receiver).emit('chat-message', {senderId: data.senderId, message: data.message});
+  });
+
+  socket.on('seen', async (data) => {
+    let receiver = (await db.findById("users", data.receiverId , ["socket_id"]))[0].socket_id; // retrieve socket_id
+    io.to(receiver).emit('seen', {receiverId: data.receiverId});
   });
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
 })
-
 
 
 

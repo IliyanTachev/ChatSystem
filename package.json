@@ -17,9 +17,17 @@
   },
   "homepage": "https://github.com/IliyanTachev/ChatSystem#readme",
   "dependencies": {
+    "cookie-parser": "1.4.5",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
+<<<<<<< HEAD
     "sass": "1.32.2",
+=======
+    "express-session": "^1.17.1",
+    "mysql": "2.18.1",
+    "passport": "0.4.1",
+    "passport-local": "1.0.0",
+>>>>>>> e6014aaf57b0f73a800f4f7535b8ded0ab392471
     "socket.io": "^3.0.4"
   }
 }

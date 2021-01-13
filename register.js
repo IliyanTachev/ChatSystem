@@ -1,10 +1,13 @@
 const isValidEmail = require('./common_functions.js').isValidEmail;
 const Account = require('./entities/account.js');
+const db = require('./database').database;
 
-let createAccount = (formData, accounts) => {
-    console.log(formData);
+let createAccount = async (formData) => {
     let {firstName, lastName, username, email, password} = formData;
-    
+
+    let user = await db.findByEmail(email);
+    if(user > 0) return {status: "error", message: "Email already exists."};
+
     if(firstName.trim() == "" ||
         lastName.trim() == "" ||
         username.trim() == "" ||
@@ -15,16 +18,17 @@ let createAccount = (formData, accounts) => {
        !isValidEmail(email)
       ) return {status: "error", message: "Invalid input. Please, try again."};
 
-    for(const account of accounts){ // Check for duplicate Email
-        if(account.email == email){
-            return {status: "error", message: "Email already exists."};
-        }
+    const account = {
+        'first_name': firstName,
+        'last_name': lastName,
+        username, email, password,
+        'is_logged': 0
     }
 
-    const account = new Account(firstName, lastName, username, email, password);
-    // clearInputFields(firstName, lastName, userName, email, password);
-    accounts.push(account);
-    return {status: "success"};
+    let insertId = await db.insertOne("users", account);
+    account._id = insertId;
+   
+    return {status: "success", user: account};
 }
 
 exports.createAccount = createAccount;

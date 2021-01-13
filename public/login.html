@@ -3,8 +3,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <script src="./bower_components/jquery/dist/jquery.js"></script>
-    <link href="./bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <link rel="stylesheet"  type="text/css" href="/styles/main.css"/>
 </head>
 <body>
@@ -16,7 +16,7 @@
                         <h1>Login</h1>
                     </div>
                 </div>
-                <form id="loginForm" action="/login" method="POST">
+                <form id="loginForm" action="/auth/login" method="POST">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
                         <input type="text" name="email"  class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
@@ -31,7 +31,7 @@
                     </div>
                     <!-- Log In with Google here -->
                     <div>
-                        <br><p class="text-center botMargin0">Don't have account? <a href="/register" id="signup">Sign up here</a></p>
+                        <br><p class="text-center botMargin0">Don't have account? <a href="/auth/register" id="signup">Sign up here</a></p>
                     </div>
                 </form>
             </div>
