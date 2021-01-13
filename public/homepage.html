@@ -4,49 +4,231 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet"  type="text/css" href="/styles/homepage.css"/>
+    <script src="animations.js" defer></script>
     <title>Homepage</title>
 </head>
 <body>
     <main>
-        <div class="logo">
-            <img class="logoImg" src="styles/images/logo.jpg">
-        </div>
-        <div class="sBar">
-            <input class="searchBarInput" type="text" placeholder="Search for friends">
-        </div>
-        <div class="addFriend">
-            <button class="addFriendBtn">Add Friend</button>
-        </div>
-        <section class="nav">
-            <div class="navFlex">
-                <button class="accBtn">Account</button>
-                <button class="homeBtn">Home</button>
-                <button class="backBtn">Back</button>
+        <div class="header">
+            <div class="logo">
+                <img class="logoImg" src="images/yt-logo-transparent-background.png">
             </div>
-        </section>
+            <div class="sBar">  
+                <input class="searchBarInput" type="text" placeholder="Search for friends / groups">
+            </div>
+            <div class="addFriend">
+                <button class="addFriendBtn">Add Friend</button>
+            </div>
+            <section class="nav">
+                <div class="navFlex">
+                    <button class="accBtn">Account</button>
+                    <button class="homeBtn">Home</button>
+                    <button class="backBtn">Back</button>
+                </div>
+            </section>
+            <div class="logo-nav-separator">
+                <div class="separator-border"></div>
+            </div>
+        </div>
         <aside class="Lsidebar">
-            <ul class="leftContacts">
-                <li><a href="#">Contact 1</a></li>
-                <li><a href="#">Contact 2</a></li>
-                <li><a href="#">Contact 3</a></li>
-            </ul>
+            <div class="contacts" style="grid-area: contacts;">
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Iliyan Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Hristian Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Petko Iliev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Mario Hristov</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Joro Petrovich</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Simo Melenik</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Vulko Urisav</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Emilia Parvekova</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Mitko Manchev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Vulko Urisav</label>
+                </div>
+
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Iliyan Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Hristian Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Petko Iliev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Mario Hristov</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Joro Petrovich</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Simo Melenik</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Vulko Urisav</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Emilia Parvekova</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Mitko Manchev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend1Name">Vulko Urisav</label>
+                </div>
+            </div>
+            <div class="arrow" style="
+            grid-area: leftArrow;
+            grid-row: 1/2 !important;
+            grid-column: 2/3 !important;
+            border-width: 0 0 0 1px;
+            box-shadow: -3.5px 0 5px -5px #000;
+            justify-self: end;">
+                <img class="arrow-img" src="images/arrow3.png" width="10px" style="transform: rotate(180deg);">
+            </div>
         </aside>
-        <section class="chatOpt">
-            <div>
-                <label class="currnetChatAcc" style="color: white;">Chat Options Here</label>
-            </div>
-        </section>
-        <section class="currMessage">
-            <div>
-                <label class="currnetMessage" style="color: white;">Current Message</label>
-            </div>
+        <section class="chatSection">
+            <section class="chatOpt">
+                <div class="currnetChatAccDiv">
+                    <label class="currnetChatAcc" style="color: white;">Chat Options Here</label>
+                </div>
+            </section>
+            <section class="currMessage">
+                <div class="currnetMessageDiv">
+                    <label class="currnetMessage" style="color: #b0b3b8;">Current Message</label>
+                </div>
+            </section>
         </section>
         <aside class="Rsidebar">
-            <ul class="rightGroups">
-                <li><a href="#">Group 1</a></li>
-                <li><a href="#">Group 2</a></li>
-                <li><a href="#">Group 3</a></li>
-            </ul>
+            <div class="groups" style="grid-area: groups;">
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Iliyan Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Hristian Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Iliyan Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Hristian Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Iliyan Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Hristian Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Iliyan Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Hristian Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Iliyan Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Hristian Tachev</label>
+                </div>
+
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Iliyan Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Hristian Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Iliyan Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Hristian Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Iliyan Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Hristian Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Iliyan Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Hristian Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Iliyan Tachev</label>
+                </div>
+                <div class="friend1">
+                    <img class="friend1Img" src="images/preview.jpeg" width="45px">
+                    <label class="friend2Name">Hristian Tachev</label>
+                </div>
+            </div>
+            <div class="arrow" style="
+            grid-area: rightArrow;
+            grid-row: 1/2 !important;
+            grid-column: 1/2 !important;
+            border-width: 0 1px 0 0;
+            box-shadow: 3.5px 0 5px -5px #000;
+            justify-self: start;">
+                <img class="arrow-img" src="images/arrow3.png" width="10px" style="transform: rotate(0deg);">
+            </div>
         </aside>
     </main>
 </body>

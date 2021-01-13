@@ -6,23 +6,29 @@ html {
     font-family: sans-serif;
 }
 
+h1 {
+    color: #fff;
+}
+
 label {
     font-weight: bold;
-    color: #494949;
+    /*color: #494949;*/
+    color: #fff;
+}
+
+p {
+    color: #fff;
 }
 
 input {
     font: inherit;
     border: none;
     border-bottom: 2px solid #ccc;
+    background-color: rgb(47, 47, 47) !important;
     color: #494949;
+    border: rgb(59, 59, 59) !important;
     display: block;
     margin: 1rem 0;
-}
-
-input:focus {
-    outline: none;
-    border-color: #ff0062;
 }
 
 .inline-controls {
@@ -44,11 +50,14 @@ button {
 body {
     padding-top:4.2rem;
     padding-bottom:4.2rem;
-    background:rgba(0, 0, 0, 0.76) !important;
+    /*background:rgba(0, 0, 0, 0.76) !important;*/
+    background-color: rgb(22, 22, 22) !important;
 }
 
 a {
     text-decoration:none !important;
+    font-size: 16.3px !important;
+    color: #469fff !important;
 }
 
 .myform{
@@ -56,6 +65,7 @@ a {
     display: -ms-flexbox;
     display: flex;
     padding: 1rem;
+    background-color: rgb(59, 59, 59) !important;
     -ms-flex-direction: column;
     flex-direction: column;
     width: 100%;
