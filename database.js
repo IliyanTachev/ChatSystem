@@ -110,6 +110,20 @@ var database = {
         resolve();
       });
     });
+  },
+  findAllUsersByIds: function(ids, getColumns="*"){
+    let columns = "";
+    if(Array.isArray(getColumns)) columns = getColumns.join();
+    else columns = getColumns;
+
+    let sql = `select ${columns} from ${usersTableName} where _id in (` + ids.join() + `)`;
+   
+    return new Promise((resolve, reject) => {
+      db.query(sql, function(err, results){
+        if(err) reject(err);
+        resolve(results);
+      });
+    });
   }
 }
 

@@ -78,6 +78,58 @@
         }
       });
 
+      // Rooms
+      roomParticipants = [];
+
+      $("button[id='new-room']").click(function(){
+        $("#create-room-form-wrapper").show();
+        $.ajax({
+          url: '/fetch/users',
+          method: 'GET',
+          success: function(data){
+            for(let onlineUser of data){
+              $("#create-room-form-wrapper > div#online-users").append('<button type="button" class="room-online-user btn btn-primary" data-id="' + onlineUser._id + '">' + onlineUser.username + '</button>');
+            }
+
+
+            $(".room-online-user").click(function(){
+              if($(this).hasClass("chosen")){
+                $(this).removeClass("btn-success").addClass("btn-primary"); // styling
+                $(this).removeClass("chosen");
+                // Remove participant from room
+                let id = $(this).attr("data-id");
+                for(let i=0;i<roomParticipants.length;i++) {
+                  if(roomParticipants[i] == id) {roomParticipants.splice(i, 1); break};
+                }
+              } else {
+                $(this).removeClass("btn-primary").addClass("btn-success"); // styling
+                $(this).addClass("chosen");
+                roomParticipants.push($(this).attr("data-id"));
+              }
+              console.log("roomParticipants = " + roomParticipants);
+            });
+
+
+            $("#create-room-form-wrapper #create-room").click(function(){
+              let roomName = $("#room-name").val();
+
+              $.ajax({
+                url: '/create/room',
+                method: 'POST',
+                data: {roomName, participants: roomParticipants},
+                success: function(data){
+                  if(data == "success"){
+                    $("#create-room-form-wrapper").hide();
+                    $("#rooms-list").show();
+                    $("#rooms-list").append('<button class="room" type="button">' + roomName + '</button>');
+                  }
+                }
+              });
+          });
+
+          }
+        });
+      });
     });
   </script>
   <style>
@@ -113,16 +165,31 @@
 </head>
 <body>
     <h1 id="loggedUser" data-id="<%= loggedUser._id %>"> Logged as: <p id="username"><%= loggedUser.username %> </p></h1>
-    People online:
-    <ul id="online-users">
-      <% if(onlineUsers.length != 0) { %>
-        <% for(let user of onlineUsers) { %>
-          <li> 
-            <button type="button" class="friend btn btn-primary" data-id="<%= user._id %>"><%= user.username %></button>
-          </li>
-        <% } %>
-      <% } else { %> <li id="default-li">No online users.</li> <% } %>
-    </ul>
+    <div style="display: inline-block;">
+        People online:
+        <ul id="online-users">
+          <% if(onlineUsers.length != 0) { %>
+            <% for(let user of onlineUsers) { %>
+              <li> 
+                <button type="button" class="friend btn btn-primary" data-id="<%= user._id %>"><%= user.username %></button>
+              </li>
+            <% } %>
+          <% } else { %> <li id="default-li">No online users.</li> <% } %>
+        </ul>
+    </div>
+
+    <div style="display: inline-block;float:right;">
+        <button id="new-room" type="button">New room</button>
+        <div id="create-room-form-wrapper" style="display:none;border: 1px solid black; padding: 15px;">
+            <input type="text" id="room-name" placeholder="Enter room name">
+            <div id="online-users"></div>
+            <button id="create-room" type="button">Create</button>
+        </div>
+        Rooms:
+        <div id="rooms-list" style="display: none;">
+        </div>
+    </div>
+
     
     <div class="chat-window">
       <div id="chat-title">

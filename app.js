@@ -39,7 +39,12 @@ app.get('/', async function(req, res){
     loggedUser: req.user[0],
     onlineUsers
   });
-})
+});
+
+app.get('/fetch/users', async function(req, res){
+  let onlineUsers = await db.findAllLoggedUsers();
+  res.send(onlineUsers);
+});
 
 io.on('connection', (socket) => {
   console.log("new user connected -> " + socket.id);
@@ -66,6 +71,18 @@ io.on('connection', (socket) => {
     console.log('user disconnected');
   });
 })
+
+// Create new room
+app.post('/create/room', async function(req, res){
+  let roomName = req.body.roomName;
+  let fetchedSocketIds = (await db.findAllUsersByIds(req.body.participants, "socket_id")).map(userObj => userObj.socket_id);
+  for(let socketId of fetchedSocketIds){
+    io.sockets.connected[socketId].join(roomName);
+  }
+
+  
+  res.send("success");
+});
 
 
 
