@@ -35,6 +35,20 @@ app.use(function(req, res, next){ // isLogged
 app.get('/', async function(req, res){
   let onlineUsers = await db.findAllLoggedUsers();
 
+  res.render('homepage', {
+    loggedUser: req.user[0],
+    onlineUsers
+  });
+
+  // res.render('chat', {
+    // loggedUser: req.user[0],
+    // onlineUsers
+  // });
+});
+
+app.get('/chat', async function(req, res){
+  let onlineUsers = await db.findAllLoggedUsers();
+
   res.render('chat', {
     loggedUser: req.user[0],
     onlineUsers
@@ -80,7 +94,7 @@ app.post('/create/room', async function(req, res){
     io.sockets.connected[socketId].join(roomName);
   }
 
-  
+
   res.send("success");
 });
 

@@ -95,7 +95,7 @@ var database = {
     let sql = `update users set socket_id='${socketId}' where _id='${userId}'`;
 
     return new Promise(function (resolve, reject) {
-      db.query(sql, async function(err, result){
+      db.query(sql, async function(err){
         if(err) reject(err);
         resolve();
       });
