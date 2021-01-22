@@ -74,6 +74,13 @@ io.on('connection', (socket) => {
   socket.on('chat-message', async (data) => {
     let receiver = (await db.findById("users", data.receiverId , ["socket_id"]))[0].socket_id; // retrieve socket_id
     io.to(receiver).emit('chat-message', {senderId: data.senderId, message: data.message});
+    const msg = {
+      'sender_id': data.senderId,
+      'receiver_id': data.receiverId,
+      'message': data.message
+    }
+
+    await db.insertOne('messages', msg);
   });
 
   socket.on('seen', async (data) => {
@@ -90,12 +97,19 @@ io.on('connection', (socket) => {
 app.post('/create/room', async function(req, res){
   let roomName = req.body.roomName;
   let fetchedSocketIds = (await db.findAllUsersByIds(req.body.participants, "socket_id")).map(userObj => userObj.socket_id);
+  
   for(let socketId of fetchedSocketIds){
-    io.sockets.connected[socketId].join(roomName);
+    io.sockets.sockets.get(socketId).join(roomName);
   }
 
+  io.to(roomName).emit("added_to_new_room", {roomName});
 
-  res.send("success");
+  res.send("success")
+});
+
+app.post('/fetch/messages', async function(req, res){
+  let messages = await db.findAllMessages(req.body.senderId, req.body.receiverId);
+  res.send(messages);
 });
 
 
