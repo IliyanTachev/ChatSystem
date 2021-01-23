@@ -11,6 +11,9 @@ const rightArrowImg = document.querySelectorAll(".arrow-img")[1];
 let friendName = document.querySelectorAll(".friendName");
 let friend2Name = document.querySelectorAll(".friend2Name");
 
+let leftAddFriendImg = document.getElementById("leftPlusSign");
+let rightAddFriendImg = document.getElementById("rightPlusSign");
+
 let isLeftSidebarClosed = false;
 let isRightSidebarClosed = false;
 
@@ -21,12 +24,16 @@ leftArrowDiv.addEventListener("click", () => {
         leftArrowImg.classList.add("rotateArrowOpen");
         leftArrowDiv.classList.add("arrowOpacityDecrease");
         addOrRemoveStyleClassArray(friendName, "add", "friendNameBigAnimation");
+        leftAddFriendImg.classList.add("addFriendMarginIncrease");
         setTimeout(() => {
             leftSidebar.classList.remove("open-Lsidebar");
             leftArrowImg.classList.remove("rotateArrowOpen");
             leftArrowImg.style.transform = "rotate(180deg)";
             leftArrowDiv.classList.remove("arrowOpacityDecrease");
             addOrRemoveStyleClassArray(friendName, "remove", "friendNameBigAnimation", "14.53px");
+            leftAddFriendImg.classList.remove("addFriendMarginIncrease");
+            leftAddFriendImg.style.marginLeft = "82%";
+            leftAddFriendImg.style.width = "20px";
             isLeftSidebarClosed = false;
         }, 500);
     }else{
@@ -34,6 +41,7 @@ leftArrowDiv.addEventListener("click", () => {
         leftArrowImg.classList.add("rotateArrowClose");
         leftArrowDiv.classList.add("arrowOpacityDecrease");
         addOrRemoveStyleClassArray(friendName, "add", "friendNameSmollAnimation");
+        leftAddFriendImg.classList.add("addFriendMarginDecrease");
         setTimeout(() => {
             leftSidebar.style.gridColumn = "1/2";
             leftSidebar.classList.remove("close-Lsidebar");
@@ -41,6 +49,9 @@ leftArrowDiv.addEventListener("click", () => {
             leftArrowImg.style.transform = "rotate(360deg)";
             leftArrowDiv.classList.remove("arrowOpacityDecrease");
             addOrRemoveStyleClassArray(friendName, "remove", "friendNameSmollAnimation", "0px");
+            leftAddFriendImg.classList.remove("addFriendMarginDecrease");
+            leftAddFriendImg.style.marginLeft = "3px";
+            leftAddFriendImg.style.width = "13px";
             isLeftSidebarClosed = true;
         }, 500);
     }
@@ -53,12 +64,16 @@ rightArrowDiv.addEventListener("click", () => {
         rightArrowImg.classList.add("rotateArrowClose");
         rightArrowDiv.classList.add("arrowOpacityDecrease");
         addOrRemoveStyleClassArray(friend2Name, "add", "friendNameBigAnimation");
+        rightAddFriendImg.classList.add("addFriendMarginIncrease");
         setTimeout(() => {
             rightSidebar.classList.remove("open-Rsidebar");
             rightArrowImg.classList.remove("rotateArrowClose");
             rightArrowImg.style.transform = "rotate(360deg)";
             rightArrowDiv.classList.remove("arrowOpacityDecrease");
             addOrRemoveStyleClassArray(friend2Name, "remove", "friendNameBigAnimation", "14.53px");
+            rightAddFriendImg.classList.remove("addFriendMarginIncrease");
+            rightAddFriendImg.style.marginLeft = "220px";
+            rightAddFriendImg.style.width = "20px";
             isRightSidebarClosed = false;
         }, 500);
     }else{
@@ -66,6 +81,7 @@ rightArrowDiv.addEventListener("click", () => {
         rightArrowImg.classList.add("rotateArrowOpen");
         rightArrowDiv.classList.add("arrowOpacityDecrease");
         addOrRemoveStyleClassArray(friend2Name, "add", "friendNameSmollAnimation");
+        rightAddFriendImg.classList.add("addFriendMarginDecrease");
         setTimeout(() => {
             rightSidebar.style.gridColumn = "5/6";
             rightSidebar.classList.remove("close-Rsidebar");
@@ -73,6 +89,9 @@ rightArrowDiv.addEventListener("click", () => {
             rightArrowImg.style.transform = "rotate(180deg)";
             rightArrowDiv.classList.remove("arrowOpacityDecrease");
             addOrRemoveStyleClassArray(friend2Name, "remove", "friendNameSmollAnimation", "0px");
+            rightAddFriendImg.classList.remove("addFriendMarginDecrease");
+            rightAddFriendImg.style.marginLeft = "3px";
+            rightAddFriendImg.style.width = "13px";
             isRightSidebarClosed = true;
         }, 500);
     }

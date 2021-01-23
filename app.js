@@ -98,7 +98,15 @@ app.post('/create/room', async function(req, res){
   res.send("success");
 });
 
-
+app.post('/addFriend', async function(req, res){
+  let parsedForm = req.body.formData.split("&");
+  console.log(parsedForm);
+  parsedForm[0] = parsedForm[0].split("=")[1];
+  parsedForm[1] = parsedForm[1].split("=")[1];
+  let result = await db.findUserByUsernameAndCode(parsedForm[0], parsedForm[1]);
+  if(result) res.send("success");
+  else res.send("error");
+});
 
 http.listen(port, function(){
   console.log("Server started on port " + port + "...");

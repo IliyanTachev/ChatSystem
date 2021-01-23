@@ -124,6 +124,16 @@ var database = {
         resolve(results);
       });
     });
+  },
+  findUserByUsernameAndCode: function(username, code){
+    let sql = `select _id from ${usersTableName} where code_id='${code}' and username='${username}' limit 1`;
+
+    return new Promise((resolve, reject) => {
+      db.query(sql, function(err, result){
+        if(err) reject(err);
+        result.length == 0 ? resolve(false) : resolve(true);
+      });
+    });
   }
 }
 

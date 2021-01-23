@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet"  type="text/css" href="/styles/homepage.css"/>
     <script src="/js/animations.js" defer></script>
-
-    <!-- <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous"> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
     <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/js/modalWindows.js" defer></script>
     <script src="/js/chat.js" defer></script>
     <title>Homepage</title>
 </head>
@@ -18,11 +17,8 @@
             <div class="logo">
                 <img class="logoImg" src="images/yt-logo-transparent-background.png">
             </div>
-            <div class="sBar">  
+            <div class="sBar">
                 <input class="searchBarInput" type="text" placeholder="Search for friends / groups">
-            </div>
-            <div class="addFriend">
-                <button class="addFriendBtn">Add Friend</button>
             </div>
             <section class="nav">
                 <div class="navFlex">
@@ -31,30 +27,92 @@
                     <button class="backBtn" type="button">Back</button>
                 </div>
             </section>
-
             <div class="logo-nav-separator">
                 <div class="separator-border">
                 </div>
             </div>
         </div>
         <aside class="Lsidebar">
-            <div class="contacts" style="grid-area: contacts;">
-                    <% if(onlineUsers.length != 0) { %>
-                        <% for(let user of onlineUsers) { %> 
-                            <div class="friend">
-                                <img class="friendImg" src="images/preview.jpeg" width="45px">
-                                <p data-id="<%= user._id %>" class="friendName"><%= user.username %></p>
+            <div class="contactsHeader">
+                <!-- <div class="friend" style="grid-template-columns: 45px 1fr 20px;">
+                    <img class="friendImg" src="images/addFriend.png" width="45px">
+                    <label class="friendName" style="color: #6d6d6d;font: 600 14.53px Arial;">Friends</label>
+                    <img class="friendImg" style="grid-column: 3/4;align-self: center !important;" src="images/plusSign.png" width="20px">
+                </div> -->
+                <div class="friend" style="grid-template-columns: 38px 1fr;">
+                    <img class="friendImg" style="justify-self: end !important;align-self: center !important;" src="images/addFriend.png" width="25px">
+                    <label class="friendName" style="color: #6d6d6d;font: 600 14.53px Arial;">Friends</label>
+                    <img id="leftPlusSign" class="friendImg" style="grid-column: 2/3;align-self: center !important;margin-left: 82%;" src="images/plusSign.png" width="20px">
+                </div>
+                <div style="
+                border: rgb(39, 39, 39);
+                border-style: solid;
+                border-width: 1px 0 0 0;
+                margin-bottom: 5px;
+                position: relative;
+                width: 90%;
+                left: 50%;
+                transform: translateX(-50%);"></div>
+            </div>
+
+            <div class="addFriendModalWindow">
+                <div class="addFriendModalWindowContent" style="height: 17%;">
+                    <form class="addFriendModalContentGrid" autocomplete="off">
+                        <div class="username">
+                            <input class="usernameInput lineInput" name="username" placeholder="Username">
+                        </div>
+                        <div class="Id">
+                            <input class="IdInput lineInput" name="code_id" placeholder="User-ID">
+                        </div>
+                        <div class="modalCloseBtn">&times;</div>
+                        <div class="sendFriendRequest">
+                            <input type="submit" value="Add Friend" class="sendFriendRequestBtn button">
+                        </div>
+                        <div id="friendErrorAlert" class="errorMessage">
+                            <div class="errorMessageDivWrapper">
+                                <div class="errorImgWrapper">
+                                    <img class="errorImg" src="images/errorMsgIcon.png" width="15px">
+                                </div>
+                                <div class="errorMsgWrapper">
+                                    <label class="errorMsg">Such user does not exist!</label>
+                                </div>
                             </div>
-                        <% } %>
-                    <% } else { %> 
+                        </div>
+                        <div id="friendSuccessAlert" class="errorMessage" style="background-color: #DFF2BF;border: 1px solid rgb(50, 198, 113);">
+                            <div class="errorMessageDivWrapper">
+                                <div class="errorImgWrapper">
+                                    <img class="errorImg" src="images/successMsgIcon.png" width="15px">
+                                </div>
+                                <div class="errorMsgWrapper">
+                                    <label class="errorMsg" style="color:rgb(39, 39, 39);">Friend request successfully send!</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="contacts" style="grid-area: contacts;">
+                <div class="friend">
+                    <img class="friendImg" src="images/preview.jpeg" width="45px">
+                    <label class="friendName">Hristian Tachev</label>
+                </div>
+                <% if(onlineUsers.length != 0) { %>
+                    <% for(let user of onlineUsers) { %> 
                         <div class="friend">
-                                <p id="default-li">No online users.</p>
+                            <img class="friendImg" src="images/preview.jpeg" width="45px">
+                            <label data-id="<%= user._id %>" class="friendName"><%= user.username %></label>
                         </div>
                     <% } %>
+                <% } else { %> 
+                    <div class="friend">
+                        <label id="default-li">No online users.</p>
+                    </div>
+                <% } %>
             </div>
             <div class="arrow" style="
             grid-area: leftArrow;
-            grid-row: 1/2 !important;
+            grid-row: 1/3 !important;
             grid-column: 2/3 !important;
             border-width: 0 0 0 1px;
             box-shadow: -3.5px 0 5px -5px #000;
@@ -69,18 +127,18 @@
                 </div>
             </section>
             <section>
-                    <div class="chat-window">
-                            <div id="chat-title">
-                              <h4>No active chat</h4>
-                            </div>
-                            <div id="chat-body"> 
-                              <h5 id="default-msg">No messages</h5>       
-                            </div>
-                            <div id="chat-footer">
-                                <input type="text" name="message" placeholder="Enter message">
-                                <input id="send-msg-btn" type="submit" value="Send">
-                            </div>
+                <div class="chat-window">
+                    <div id="chat-title">
+                        <h4>No active chat</h4>
                     </div>
+                    <div id="chat-body"> 
+                        <h5 id="default-msg">No messages</h5>       
+                    </div>
+                    <div id="chat-footer">
+                        <input type="text" name="message" placeholder="Enter message">
+                        <input id="send-msg-btn" type="submit" value="Send">
+                    </div>
+                </div>
             </section>
             <section class="currMessage">
                 <div class="currnetMessageDiv">
@@ -89,27 +147,92 @@
             </section>
         </section>
         <aside class="Rsidebar">
+            <div class="groupsHeader">
+                <div class="friend" style="grid-template-columns: 45px 1fr;">
+                    <img class="friendImg" style="justify-self: end !important;align-self: center !important;" src="images/groupsPic.png" width="35px">
+                    <label class="friend2Name" style="color: #6d6d6d;font: 600 14.53px Arial;">Groups</label>
+                    <img id="rightPlusSign" class="friendImg" style="grid-column: 2/3;align-self: center !important;margin-left: 82%;" src="images/plusSign.png" width="20px">
+                </div>
+                <div style="
+                border: rgb(39, 39, 39);
+                border-style: solid;
+                border-width: 1px 0 0 0;
+                margin-bottom: 5px;
+                position: relative;
+                width: 90%;
+                left: 50%;
+                transform: translateX(-50%);"></div>
+            </div>
+
+            <div class="addFriendModalWindow">
+                <div class="addFriendModalWindowContent" style="height: 70%;">
+                    <div class="createGroupModalContentGrid">
+                        <input class="groupName lineInput" placeholder="Group name">
+                        <div class="modalCloseBtn">&times;</div>
+                        <div class="listOfFriends" style="grid-row: 2/6;grid-column: 1/2;">
+                            <div class="allFriendsHeader">
+                                <label class="allFriendsHeaderLabel">List of all friends</label>
+                                <div class="allFriendsHeaderBottomBroder"></div>
+                            </div>
+                            <div class="allFriends">
+                                <div class="friendInList">
+                                    <img class="friendInListImg" src="images/preview.jpeg" width="30px">
+                                    <label class="friendInListName">Malis Velicev</label>
+                                </div>
+                                <div class="friendInList">
+                                    <img class="friendInListImg" src="images/preview.jpeg" width="30px">
+                                    <label class="friendInListName">Lesim Sereo</label>
+                                </div>
+                                <div class="friendInList">
+                                    <img class="friendInListImg" src="images/preview.jpeg" width="30px">
+                                    <label class="friendInListName">Valim Perisal</label>
+                                </div>
+                            </div>
+                        </div>
+                        <img class="groupPhoto" src="images/sampleGroupPhoto.png" width="45%"> <!--width="120px"-->
+                        <button class="changeGroupPhoto">Change Group Photo</button>
+
+                        <div class="listOfFriends" style="grid-row: 4/5;grid-column: 2/3;margin-bottom: 5%;">
+                            <div class="allFriendsHeader">
+                                <label class="allFriendsHeaderLabel" style="width: 140px;">List of added friends</label>
+                                <div class="allFriendsHeaderBottomBroder"></div>
+                            </div>
+                            <div class="allFriends" style="overflow-y: auto !important;">
+                                
+                            </div>
+                        </div>
+                        <button class="createGroupBtn sendFriendRequestBtn">Create Group</button>
+                    </div>
+                </div>
+            </div>
+
             <div class="groups" style="grid-area: groups;">
-                <div class="friend" style="border-left: 1px solid white;border-top: 1px solid white;border-bottom: 1px solid white;" id="new-room">
-                    <img height="50px" src="https://img.icons8.com/nolan/64/plus.png"/>
-                    <p class="friend2Name">New room</p>
+                <!-- <div class="friend" style="border-left: 1px solid white;border-top: 1px solid white;border-bottom: 1px solid white;" id="new-room">
+                    <img width="45px" src="https://img.icons8.com/nolan/64/plus.png"/>
+                    <label class="friend2Name">New room</p>-->
                     <!-- New room dialog -->
-                    <div style="display: inline-block;float:right;">
+                    <!--<div style="display: inline-block;float: right;">
                             <div id="create-room-form-wrapper" style="display:none;border: 1px solid black; padding: 15px;position:absolute;">
                                 <input type="text" id="room-name" placeholder="Enter room name">
                                 <div id="online-users"></div>
                                 <button id="create-room" type="button">Create</button>
                             </div>
                     </div>
-                </div>
-                <!-- <div class="friend">
+                </div> -->
+                <!-- <div style="display: inline-block;justify-self: center !important;">
+                    <div class="group" style="box-shadow: inset -10px -15px 10px -14px #000;margin-left: 0;">
+                        <img class="friendImg" src="images/groupsPic.png" width="45px">
+                        <label class="friend2Name" style="text-shadow: 2px 3px 1px #000;color: #6d6d6d;">Groups</label>
+                    </div>
+                </div> -->
+                <div class="group">
                     <img class="friendImg" src="images/preview.jpeg" width="45px">
                     <label class="friend2Name">Hristian Tachev</label>
-                </div> -->
+                </div>
             </div>
             <div class="arrow" style="
             grid-area: rightArrow;
-            grid-row: 1/2 !important;
+            grid-row: 1/3 !important;
             grid-column: 1/2 !important;
             border-width: 0 1px 0 0;
             box-shadow: 3.5px 0 5px -5px #000;

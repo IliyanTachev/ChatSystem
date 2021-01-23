@@ -21,7 +21,8 @@ main {
     "Lsidebar . chatSection . Rsidebar";
 }
 
-button {
+button,
+.button {
     padding: 8px 20px;
     background-color: rgb(47, 47, 47);
     color: #fff;
@@ -63,7 +64,7 @@ a {
     grid-template-rows: 1fr;
     grid-template-columns: 1fr 1.5fr 5fr 1.65fr 0.85fr;
     grid-template-areas: 
-    "logo logo-nav-separator nav sBar addFriend";
+    "logo logo-nav-separator nav sBar sBar";
 }
 
 .header > div, .header > section {
@@ -150,10 +151,25 @@ a {
     box-shadow: 0 -1px 7px #000;
 
     display: grid;
-    grid-template-rows: 1fr;
+    grid-template-rows: 63px 1fr;
     grid-template-columns: 9fr 1fr;
     grid-template-areas:
+    "contactsHeader contactsHeader"
     "contacts contacts";
+}
+
+.addFriendMarginDecrease {
+    animation-name: addFriendMarginDecrease;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+.addFriendMarginIncrease {
+    animation-name: addFriendMarginIncrease;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
 }
 
 .close-Lsidebar {
@@ -171,19 +187,220 @@ a {
 }
 
 .contacts {
-    grid-row: 1/2;
+    grid-row: 2/3;
     grid-column: 1/2;
     overflow-y:auto;
 }
 
+.contactsHeader {
+    grid-row: 1/2;
+    grid-column: 1/3;
+}
+
+.addFriendModalWindow {
+    display: none;
+    position: fixed;
+    z-index: 5;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: none;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.6);
+}
+
+.addFriendModalWindowContent {
+    height: 50%;
+    background-color: rgb(22, 22, 22);
+    margin: 6% auto;
+    padding: 15px;
+    border: 1px solid #888;
+    border-radius: 1rem;
+    width: 35%;
+}
+
+.addFriendModalContentGrid {
+    display: grid;
+    grid-template-rows: 2fr 1fr;
+    grid-template-columns: 6fr 4fr;
+    grid-template-areas: 
+    "username Id"
+    "sendFriendRequest sendFriendRequest";
+}
+
+.lineInput {
+    border: none;
+    border-radius: 0;
+    border-bottom: 2px solid rgb(75, 75, 75);
+    background-color: #161616;
+    padding: 2px 5px;
+    font-size: 16px;
+}
+
+.lineInput:active,
+.lineInput:focus {
+    border-bottom: 2px solid #ccc;
+}
+
+.username {
+    grid-area: username;
+    grid-row: 1/2;
+    grid-column: 1/2;
+    justify-self: center;
+    align-self: center;
+    width: 100%;
+}
+
+.usernameInput {
+    width: 90%;
+}
+
+.Id {
+    grid-area: Id;
+    grid-row: 1/2;
+    grid-column: 2/3;
+    justify-self: center;
+    align-self: center;
+    width: 100%;
+}
+
+.IdInput {
+    width: 80%;
+}
+
+.sendFriendRequest {
+    grid-area: sendFriendRequest;
+    grid-row: 2/3;
+    grid-column: 1/2;
+    display: inline-block;
+    justify-self: start;
+    align-self: center;
+    width: 20%;
+}
+
+.sendFriendRequestBtn {
+    border-radius: 0;
+    background-color: #161616;
+    border-bottom: 2px solid rgb(75, 75, 75);
+}
+
+.sendFriendRequestBtn:hover {
+    background-color: #2f2f2f;
+    border-bottom: 2px solid #ccc;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.sendFriendRequestBtn:active {
+    background-color: #222222;
+}
+
+.errorMessage {
+    opacity: 0;
+    grid-row: 2/3;
+    grid-column: 1/3;
+    display: inline-block;
+    justify-self: end;
+    align-self: center;
+    border: 1px solid #D8000C;
+    border-top-right-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    background-color: #ff9494;
+    width: 70%;
+    height: 100%;
+}
+
+.showAlert {
+    animation-name: opacity0to1;
+    animation-duration: 5s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+}
+
+.hideAlert {
+    animation-name: opacity1to0;
+    animation-duration: 1s;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+}
+
+.showAndCloseAlert {
+    animation-name: opacity0to1to0;
+    animation-duration: 4s;
+    animation-timing-function: ease-in-out;
+    /* animation-fill-mode: forwards; */
+}
+
+.errorMessageDivWrapper{
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 9fr;
+}
+
+.errorMsgWrapper{
+    position: relative;
+    display: inline-block;
+    grid-row: 1/2;
+    grid-column: 2/3;
+    justify-self: start;
+    align-self: center;
+}
+
+.errorMsg {
+    color: #D8000C;
+    font-size: 14px;
+    font-weight: 600;
+    position: relative;
+}
+
+.errorImgWrapper {
+    display: inline-block;
+    position: relative;
+    height: 15px;
+    margin-left: 8px;
+    margin-right: 8px;
+    color: #D8000C;
+    grid-row: 1/2;
+    grid-column: 1/2;
+    justify-self: center;   
+    align-self: center;
+}
+
+.modalCloseBtn {
+    grid-row: 1/2;
+    grid-column: 2/3;
+    justify-self: end;
+    position: relative;
+    display: inline-block;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+}
+  
+.modalCloseBtn:hover,
+.modalCloseBtn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 .friend {
     padding: 8px 5px;
-    /* border: rgb(59, 59, 59);
-    border-style: solid;
-    border-width: 0 0 1px 0; */
     display: grid;
     grid-template-rows: 45px;
     grid-template-columns: 45px 1fr;
+}
+
+.group {
+    position: relative;
+    padding: 8px 5px;
+    display: grid;
+    grid-template-rows: 45px;
+    grid-template-columns: 45px 1fr;
+    margin-left: 24px;
 }
 
 .friendImg {
@@ -318,16 +535,137 @@ a {
     box-shadow: 0 0 7px #000;
 
     display: grid;
-    grid-template-rows: 1fr;
+    grid-template-rows: 63px 1fr;
     grid-template-columns: 1fr 9fr;
     grid-template-areas:
+    "groupsHeader groupsHeader"
     "groups groups";
 }
 
+.groupsHeader {
+    grid-row: 1/2;
+    grid-column: 1/3;
+}
+
+.createGroupModalContentGrid {
+    height: 100%;
+    display: grid;
+    grid-template-rows: 1fr 1.5fr 1fr 5.5fr 1fr;
+    grid-template-columns: 5fr 5fr;
+}
+
+.groupName {
+    grid-row: 1/2;
+    grid-column: 1/2;
+    justify-self: center;
+    align-self: center;
+}
+
+.listOfFriends {
+    justify-self: center;
+    align-self: center;
+    background-color: #141414;
+    width: 90%;
+    height: 95%;
+    margin-top: 5%;
+    border-radius: 1rem;
+    border: 1px solid #888;
+    overflow-y: auto;
+
+    display: grid;
+    grid-template-rows: 50px 1fr;
+    grid-template-columns: 1fr;
+}
+
+.allFriendsHeader {
+    grid-row: 1/2;
+    grid-column: 1/2;
+    width: 100%;
+}
+
+.allFriendsHeaderLabel {
+    display: block;
+    position: relative;
+    width: 125px;
+    margin: 8px auto;
+    color: #6d6d6d;
+    font: 600 13.35px Arial;
+}
+
+.allFriendsHeaderBottomBroder {
+    height: 20px;
+    border-top: 1px solid #888;
+    border-top-left-radius: 1rem;
+    background-color: transparent;
+}
+
+.allFriends {
+    grid-row: 1/3;
+    grid-column: 1/2;
+    width: 100%;
+    margin-top: 35px;
+    margin-bottom: 2px;
+    overflow-y: auto;
+}
+
+.friendInList {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 30px 1fr;
+    width: 93%;
+    height: auto;
+    position: relative;
+    margin: 0 auto;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border: none;
+    border-bottom: 2px solid #252525;
+}
+
+.friendInListImg {
+    grid-row: 1/2;
+    grid-column: 1/2;
+}
+
+.friendInListName {
+    grid-row: 1/2;
+    grid-column: 2/3;
+    margin-left: 10px;
+    justify-self: start;
+    align-self: center;
+}
+
+.groupPhoto {
+    grid-row: 1/3;
+    grid-column: 2/3;
+    justify-self: center;
+    align-self: center;
+}
+
+.changeGroupPhoto {
+    grid-row: 3/4;
+    grid-column: 2/3;
+    justify-self: center;
+    align-self: center;
+}
+
+/* .listOfAddedFriends {
+    grid-row: 4/5;
+    grid-column: 2/3;
+    justify-self: center;
+    align-self: center;
+} */
+
+.createGroupBtn {
+    grid-row: 5/6;
+    grid-column: 2/3;
+    justify-self: center;
+    align-self: center;
+}
+
 .groups {
-    grid-row: 1/2 !important;
+    grid-row: 2/3 !important;
     grid-column: 1/3 !important;
-    padding-left: 24px;
     overflow-y:auto;
 }
 
@@ -386,9 +724,35 @@ a {
     80%{opacity: 100%;}
     100%{opacity: 15%;}
 }
+@keyframes addFriendMarginDecrease {
+    0%{margin-left: 82%;width: 20px;}
+    100%{margin-left: 3px;width: 13px;}
+}
+@keyframes addFriendMarginIncrease {
+    0%{margin-left: 3px;width: 13px;}
+    100%{margin-left: 82%;width: 20px;}
+}
+@keyframes opacity0to1 {
+    0%{opacity: 0;}
+    100%{opacity: 1;}
+}
+@keyframes opacity1to0 {
+    0%{opacity: 1;}
+    100%{opacity: 0;}
+}
+@keyframes opacity0to1to0 {
+    0%{opacity: 0;}
+    5%{opacity: 1;}
+    80%{opacity: 1;}
+    100%{opacity: 0;}
+}
 
 .friend:hover{
     cursor: pointer;
+}
+
+.friendName {
+    pointer-events: none;
 }
 
 /* Homepage chat styling */

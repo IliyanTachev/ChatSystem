@@ -18,11 +18,17 @@ let createAccount = async (formData) => {
        !isValidEmail(email)
       ) return {status: "error", message: "Invalid input. Please, try again."};
 
+    let codeId = "";
+    for(let i = 0; i < 4; i++){
+        codeId = Math.floor(Math.random() * 10);
+    }  
+    
     const account = {
         'first_name': firstName,
         'last_name': lastName,
         username, email, password,
-        'is_logged': 0
+        'is_logged': 0,
+        'code_id': codeId
     }
 
     let insertId = await db.insertOne("users", account);
