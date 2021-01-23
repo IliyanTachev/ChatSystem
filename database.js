@@ -19,6 +19,8 @@ var usersTableName = 'users';
 var database = {
   insertOne: function(collectionName, obj) {
     let sql = `insert into ${collectionName} set ?`;
+    if (collectionName == "messages") sql += ", datetime=NOW()";
+
     return new Promise((resolve, reject) => {
       db.query(sql, obj, function(err, result){
         if(err) reject(err);
@@ -132,6 +134,20 @@ var database = {
       db.query(sql, function(err, result){
         if(err) reject(err);
         result.length == 0 ? resolve(false) : resolve(true);
+      })
+    });
+  },  
+  findAllMessages: function(senderId, receiverId){
+    // Join (`Users` and `Messages`)
+    let sql = `select t2.username as 'senderUsername', t1.message, t1.datetime from messages t1 INNER JOIN users t2 ON t2._id=t1.sender_id ` +
+              `where (t1.sender_id='${senderId}' and t1.receiver_id='${receiverId}')` +
+              `or (t1.sender_id='${receiverId}' and t1.receiver_id='${senderId}')` +
+              `ORDER BY t1.datetime ASC`;
+
+    return new Promise((resolve, reject) => {
+      db.query(sql, function(err, results){
+        if(err) reject(err);
+        resolve(results);
       });
     });
   }

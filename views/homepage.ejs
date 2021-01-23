@@ -22,7 +22,7 @@
             </div>
             <section class="nav">
                 <div class="navFlex">
-                    <button class="accBtn" type="button" id="loggedUser" data-id="<%= loggedUser._id %>"> <%= loggedUser.username %> </button> <!-- Account -->
+                    <button class="accBtn" type="button" id="loggedUser" data-id="<%= loggedUser._id %>" data-username="<%= loggedUser.username %>"> <%= loggedUser.username %> </button> <!-- Account -->
                     <button class="homeBtn" type="button">Home</button>
                     <button class="backBtn" type="button">Back</button>
                 </div>
@@ -121,30 +121,19 @@
             </div>
         </aside>
         <section class="chatSection">
-            <section class="chatOpt">
+            <div class="chatOpt">
                 <div class="currnetChatAccDiv">
-                    <label class="currnetChatAcc" style="color: white;">Chat Options Here</label>
+                    <label class="chat-title" style="color: white;">No chat</label>
                 </div>
-            </section>
-            <section>
-                <div class="chat-window">
-                    <div id="chat-title">
-                        <h4>No active chat</h4>
-                    </div>
-                    <div id="chat-body"> 
-                        <h5 id="default-msg">No messages</h5>       
-                    </div>
-                    <div id="chat-footer">
-                        <input type="text" name="message" placeholder="Enter message">
-                        <input id="send-msg-btn" type="submit" value="Send">
-                    </div>
+            </div>
+            <div class="chat-body">
+            </div>
+            <div class="currMessage">
+                <div class="chat-footer">
+                    <input type="text" name="message" placeholder="Enter message">
+                    <input id="send-msg-btn" type="submit" value="Send">
                 </div>
-            </section>
-            <section class="currMessage">
-                <div class="currnetMessageDiv">
-                    <label class="currnetMessage" style="color: #b0b3b8;">Current Message</label>
-                </div>
-            </section>
+            </div>
         </section>
         <aside class="Rsidebar">
             <div class="groupsHeader">

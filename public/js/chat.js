@@ -1,17 +1,53 @@
 jQuery(function(){
-  var socket = io.connect('http://localhost:3000');
-  socket.emit('user_connected', $("#loggedUser").attr("data-id"));
-  socket.on('user_logged', (user) => {
-    console.log("user = " + JSON.stringify(user));
+  // Global Selectors
+  var loggedUser = {
+    id: $("#loggedUser").attr("data-id"),
+    username: $("#loggedUser").attr("data-username")
+  };
 
+  var socket = io.connect('http://localhost:3000');
+  socket.emit('user_connected', loggedUser.id);
+  socket.on('user_logged', (user) => {
     if(!checkIfUserAlreadyAdded(user.username)){
         updateOnlineUsers(user);
     }
 
-    $(".friend").not("#new-room").click(function(){
-        $("#chat-title > h4").text("Chatting with " + $(this).find(".friendName").html());
-        $(".friend").removeClass("btn-success");
-        $(this).addClass("btn-success");
+    // Click on friend
+    $(".friend").click(function(){
+      // Remove unchecked messages number
+      if($(this).hasClass("unchecked")){
+        $(this).find(".unchecked-num").remove();
+        $(this).removeClass("unchecked");
+      }
+
+      let receiverUsername = $(this).attr("data-username");
+
+      $(".chat-title").text("Chatting with " + receiverUsername);
+
+      // Prevent from fetching messages when it is not needed
+      if($(this).hasClass("active") === false){
+          $(".chat-body").empty(); // clear msg box
+          $.ajax({
+            url: '/fetch/messages',
+            method: 'POST',
+            data: {senderId: loggedUser.id, receiverId: $(this).attr("data-id")},
+            success: function(messages){
+              messages.forEach(messageObj => {
+                let style = loggedUser.username == messageObj.senderUsername ? 'style="display:flex;justify-content:flex-end;"' : ""; // Display loggedUser msgs on right
+                let messageLayout = '<div class="message-wrapper" ' + style + '>' +
+                                        '<div><label class="username"><strong><i>' + messageObj.senderUsername + '</i></strong></label></div>' +
+                                        '<div><p class="message">' + messageObj.message + '</p></div>' +
+                                    '</div>';
+                $(".chat-body").append(messageLayout);
+              });
+
+              $(".chat-body").scrollTop($(".chat-body").prop("scrollHeight"));
+            }
+          });
+        }
+
+        $(".friend").removeClass("active"); // Remove active from all other friends 
+        $(this).addClass("active");
     });
   });
 
@@ -19,59 +55,54 @@ jQuery(function(){
   $("#send-msg-btn").click(function(){
     let message = $('input[name="message"]').val();
     $("input[name='message']").val(''); // Clear message field
-    $("#chat-body").append($("#loggedUser").text() + ": ").append(message).append("<br/>"); // Append message to current user's chat window
+
+    let style = 'style="display:flex;justify-content:flex-end;"';
+    let messageLayout = '<div class="message-wrapper" ' + style + '>' +
+                            '<div><label class="username"><strong><i>' + loggedUser.username + '</i></strong></label></div>' +
+                            '<div><p class="message">' + message + '</p></div>' +
+                        '</div>';
+
+    $(".chat-body").append(messageLayout); // Append message to current user's chat window
 
     socket.emit('chat-message', {
-      senderId: $("#loggedUser").attr("data-id"),
-      receiverId: $(".friend.btn-success .friendName").attr("data-id"),
+      senderId: loggedUser.id, 
+      receiverId: $(".friend.active").attr("data-id"),
       message
     });
   });
 
-  // Retrieving message
+  // Receiving message
   socket.on('chat-message', (data) => {
-    $(".friend .friendName[data-id='" + data.senderId + "']").parent(".friend").click();
-    $("#default-msg").remove();
-    let senderUsername = $(".friend.btn-success").html();
-    let messageFormat = senderUsername + ": " + data.message;
-    $("#chat-body").append("<p class='new-response'>" + messageFormat + "</p>").append("<br/>");
+    let senderFriend = $(".friend[data-id='" + data.senderId + "']");
+    if(senderFriend.hasClass("active")) {
+      let senderUsername = senderFriend.attr("data-username");
+      let messageFormat = senderUsername + ": " + data.message;
+      $(".chat-body").append("<p class='new-response'>" + messageFormat + "</p>").append("<br/>");
+    } else {
+      if(senderFriend.hasClass("unchecked")){
+        let uncheckedMessagesNumber = Number(senderFriend.find(".unchecked-num").html());
+        senderFriend.find(".unchecked-num").html(uncheckedMessagesNumber+1);
+      } else {
+        senderFriend.append('<span class="unchecked-num"></span>');
+        senderFriend.addClass("unchecked");
+        senderFriend.find(".unchecked-num").html(1);
+      }
+    }
   });
 
+  // On seen
   socket.on('seen', (data) => {
     $(".chat-window .seen").remove();
-    $("#chat-body").append("<p class='seen' style='color: blue;'>seen</p><br/>");
+    $(".chat-body").append("<p class='seen' style='color: blue;'>seen</p><br/>");
   });
-
-  function updateOnlineUsers(user){
-    let onlineUsersWrapper = $(".contacts");
-    let noOnlineUsersText = $("#default-li");
-    onlineUsersWrapper.find(noOnlineUsersText).remove();
-
-    let onlineUserLayout = 
-    '<div class="friend">' +
-      '<img class="friendImg" src="images/preview.jpeg" width="45px">' +
-      '<label data-id="' + user.id + '" class="friendName">' + user.username + '</label>' +
-    '</div';
-
-    onlineUsersWrapper.append(onlineUserLayout);
-  }
-
-  function checkIfUserAlreadyAdded(username){
-    let onlineUsersElements = $(".contacts .friend .friendName");
-    for(let onlineUserElement of onlineUsersElements){
-       if(onlineUserElement.innerHTML == username) return true;
-    }
-
-    return false;
-  }
 
   $(".chat-window").click(function(){
     if(
       $(".new-response").length &&
-      $(".friend.btn-success").length == 1
+      $(".friend.active").length == 1
       ) { // if any responses and if any chat is opened 
       $(".new-response").removeClass("new-response").addClass("response");
-      socket.emit('seen', {receiverId: $(".friend.btn-success .friendName").attr("data-id")});
+      socket.emit('seen', {receiverId: $(".friend.active").attr("data-id")});
     }
   });
 
@@ -103,7 +134,6 @@ jQuery(function(){
             $(this).addClass("chosen");
             roomParticipants.push($(this).attr("data-id"));
           }
-          console.log("roomParticipants = " + roomParticipants);
         });
 
 
@@ -117,7 +147,7 @@ jQuery(function(){
             success: function(data){
               if(data == "success"){
                 $("#create-room-form-wrapper").hide();
-                $(".groups").append('<button class="room" type="button">' + roomName + '</button>');
+                alert("You successfully created new group.");
               }
             }
           });
@@ -126,4 +156,38 @@ jQuery(function(){
       }
     });
   });
+
+  socket.on('added_to_new_room', (data) => {
+    let roomLayout = 
+    '<div class="friend">' +
+      '<img class="friendImg" src="images/preview.jpeg" width="45px">' +
+      '<label data-name="' + data.roomName + '" class="friendName">' + data.roomName + '</label>' +
+    '</div';
+
+    $(".groups").append(roomLayout);
+  });
 });
+
+// Additional functions
+function updateOnlineUsers(user){
+  let onlineUsersWrapper = $(".contacts");
+  let noOnlineUsersText = $("#default-li");
+  onlineUsersWrapper.find(noOnlineUsersText).remove();
+
+  let onlineUserLayout = 
+  '<div class="friend" data-id="' + user.id + '" data-username="' + user.username + '">' +
+    '<img class="friendImg" src="images/preview.jpeg" width="45px">' +
+    '<label data-id="' + user.id + '" class="friendName">' + user.username + '</label>' +
+  '</div';
+
+  onlineUsersWrapper.append(onlineUserLayout);
+}
+
+function checkIfUserAlreadyAdded(username){
+  let onlineUsersElements = $(".contacts .friend");
+  for(let onlineUserElement of onlineUsersElements){
+     if($(onlineUserElement).attr("data-username") == username) return true;
+  }
+
+  return false;
+}

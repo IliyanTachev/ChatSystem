@@ -773,11 +773,15 @@ h3#loggedUser, h3#loggedUser > #username{
     padding: 10px;
   }
 
-  #chat-body{
-    height: 70%;
+  .chat-body{
+    position: relative;
+    width: 90%;
+    margin: 0 auto;
+    height: 100%;
+    border-left: 1px solid green;
+    border-right: 1px solid green;
     padding: 10px;
-    border: 4px solid black;
-    overflow: scroll;
+    overflow-y: scroll;
   }
 
   #chat-footer{
@@ -808,14 +812,14 @@ h3#loggedUser, h3#loggedUser > #username{
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
-.btn-success{
-    color: #fff;
-    background-color: #28a745;
-    border-color: #28a745;
-}
-
 .btn-primary{
     color: #fff;
     background-color: #007bff;
     border-color: #007bff;
+}
+
+.active{
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
 }
