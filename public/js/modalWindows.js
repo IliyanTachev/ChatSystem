@@ -32,6 +32,8 @@ modalCloseBtn[1].onclick = function() {
     createGroupModal.style.display = "none";
     //clears the input text field (group name)
     createGroupNameField.value = "";
+    //resets group photo to default
+    document.querySelector('.groupPhoto').src = "images/defaultGroupPhoto.png";
 }
   
 // When the user clicks anywhere outside of the modal, close it
@@ -44,8 +46,8 @@ window.onclick = function(event) {
         errorFriendRequestAlert.style.opacity = "0";
     } else if (event.target == createGroupModal) {  
         createGroupModal.style.display = "none";
-        //clears the input text field (group name)
         createGroupNameField.value = "";
+        document.querySelector('.groupPhoto').src = "images/defaultGroupPhoto.png";
     }
 }
 
@@ -76,8 +78,29 @@ jQuery (function() {
     });
 });
 
+//opens group modal
 createGroupBtn.onclick = function() {
     createGroupModal.style.display = "block";
+}
+
+window.addEventListener('load', function() {
+    document.querySelector('input[type="file"]').addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            var img = document.querySelector('.groupPhoto');
+            img.src = URL.createObjectURL(this.files[0]);
+            img.onload = imageIsLoaded;
+        }
+    });
+});
+
+// function selectGroupPhotoBtn() {
+//     document.getElementById("changeGroupPhotoInput").click;
+// }
+
+function imageIsLoaded() { 
+    document.querySelector('.groupPhoto').style.width = "45%";
+    document.querySelector('.groupPhoto').style.height = "95%";
+    document.querySelector('.groupPhoto').style.objectFit = "cover";
 }
 
 function addAndRemoveClass(element, clazz, time) {
