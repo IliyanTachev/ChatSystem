@@ -26,7 +26,7 @@
             </div>
             <section class="nav">
                 <div class="navFlex">
-                    <button class="accBtn" type="button" id="loggedUser" data-id="<%= loggedUser._id %>" data-username="<%= loggedUser.username %>"> <%= loggedUser.username %> </button> <!-- Account -->
+                    <button class="accBtn" type="button" id="loggedUser" data-id="<%= loggedUser.id %>" data-username="<%= loggedUser.username %>"> <%= loggedUser.username %> </button> <!-- Account -->
                     <button class="homeBtn" type="button">Home</button>
                     <button class="backBtn" type="button">Back</button>
                 </div>
@@ -42,6 +42,7 @@
                     <% if(onlineUsers.length != 0) { %>
                         <% for(let user of onlineUsers) { %> 
                             <div class="friend" data-id="<%= user._id %>" data-username="<%= user.username %>">
+                            <% if(user.unseenMessages) { console.log("unseen = " + user.unseenMessages); %> <span class="unchecked-num"><%= user.unseenMessages %></span> <% } %>
                                 <img class="friendImg" src="images/preview.jpeg" width="45px">
                                 <p class="friendName"><%= user.username %></p>
                             </div>
@@ -50,6 +51,7 @@
                         <!-- <div class="friend">
                                 <p id="default-li">No online users.</p>
                         </div> TODO -->
+                       
                     <% } %>
             </div>
             <div class="arrow" style="

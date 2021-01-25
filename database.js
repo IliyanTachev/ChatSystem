@@ -19,7 +19,7 @@ var usersTableName = 'users';
 var database = {
   insertOne: function(collectionName, obj) {
     let sql = `insert into ${collectionName} set ?`;
-    if (collectionName == "messages") sql += ", datetime=NOW()";
+    if (collectionName == "messages") sql += ", created_on=NOW()";
 
     return new Promise((resolve, reject) => {
       db.query(sql, obj, function(err, result){
@@ -71,8 +71,8 @@ var database = {
       });
     });
   },
-  findAllLoggedUsers: function(){
-    let sql = `select * from ${usersTableName} where is_logged='1' and socket_id != 'NULL'`;
+  findAllLoggedUsers: function(loggedUserId){
+    let sql = `select * from ${usersTableName} where is_logged='1' and socket_id != 'NULL' and _id!='${loggedUserId}'`;
     
     let results = [];
     return new Promise((resolve, reject) => {
@@ -127,12 +127,17 @@ var database = {
       });
     });
   },
-  findAllMessages: function(senderId, receiverId){
+  findAllMessages: function(senderId, receiverId, options = {}){
+    // Default Options
+    if(!options.hasOwnProperty("mode")) options.mode = 'default';
+    if(!options.hasOwnProperty("order")) options.order='ASC';
+
     // Join (`Users` and `Messages`)
-    let sql = `select t2.username as 'senderUsername', t1.message, t1.datetime from messages t1 INNER JOIN users t2 ON t2._id=t1.sender_id ` +
-              `where (t1.sender_id='${senderId}' and t1.receiver_id='${receiverId}')` +
-              `or (t1.sender_id='${receiverId}' and t1.receiver_id='${senderId}')` +
-              `ORDER BY t1.datetime ASC`;
+    let sql = `select t2.username as 'senderUsername', t1.message, t1.created_on, t1.seen_by_receiver from messages t1 INNER JOIN users t2 ON t2._id=t1.sender_id ` +
+              `where (t1.sender_id='${senderId}' and t1.receiver_id='${receiverId}') `;
+            
+    if(options.mode == "default") sql += `or (t1.sender_id='${receiverId}' and t1.receiver_id='${senderId}') `;
+    sql += `ORDER BY t1.created_on ` + options.order;
 
     return new Promise((resolve, reject) => {
       db.query(sql, function(err, results){
@@ -140,6 +145,26 @@ var database = {
         resolve(results);
       });
     });
+  }, 
+  setSeenMessageStatus: function(senderId, receiverId){
+    // let sql1 = `update messages set seen_by_receiver='0' where _id>=0`;
+    // new Promise((resolve, reject) => {
+    //   db.query(sql1, function(err, result){
+    //     if(err) reject(err);
+    //     resolve();
+    //   });
+    // }).then(()=>{
+      let sql2 = `update messages set seen_by_receiver='1' where created_on = ` +
+                `(SELECT latest from (SELECT MAX(created_on) as 'latest' FROM messages msgs where msgs.sender_id='${senderId}' and msgs.receiver_id='${receiverId}') as t)` +
+                ` and sender_id='${senderId}' and receiver_id='${receiverId}'`;
+
+      return new Promise((resolve, reject) => {
+          db.query(sql2, function(err, result){
+            if(err) reject(err);
+            resolve();
+          });
+      });
+    // });
   }
 }
 

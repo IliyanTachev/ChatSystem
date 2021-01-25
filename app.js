@@ -1,4 +1,4 @@
-const port = 3000;
+const port = 3001;
 const express = require('express');
 const app = express();
 var http = require('http').createServer(app);
@@ -33,10 +33,43 @@ app.use(function(req, res, next){ // isLogged
 });
 
 app.get('/', async function(req, res){
-  let onlineUsers = await db.findAllLoggedUsers();
+  let loggedUser = {
+    id: req.user[0]._id,
+    username: req.user[0].username 
+  };
 
+  let onlineUsers = await db.findAllLoggedUsers(loggedUser.id); // dont fetch loggedUser
+
+  console.log("found users = " + onlineUsers.length);
+
+  // Optimize... (calculates number of unseen msgs is any)
+  for(let i=0;i<onlineUsers.length;i++){
+    let user = onlineUsers[i];
+    if(user._id == loggedUser.id) continue;
+    
+    let sortedMessages = await db.findAllMessages(user._id, loggedUser.id, options = {mode: 'strict', order: 'DESC'});
+    console.debug("sorted = " + JSON.stringify(sortedMessages));
+    console.log("sorted length" + sortedMessages.length);
+
+    if(sortedMessages.length > 0){ // if any messages
+      if(sortedMessages[0].seen_by_receiver == '1') continue; // last message (no unseen messagess
+      else {
+        let unseenMsgCounter = 1;
+        for(let i=1;i<sortedMessages.length;i++){
+          if(sortedMessages[i].seen_by_receiver == '1') {
+            break;
+          }
+          unseenMsgCounter++;
+        }
+        user['unseenMessages'] = unseenMsgCounter;
+      }
+    }
+  }
+
+  console.log("users = " + JSON.stringify(onlineUsers));
+  
   res.render('homepage', {
-    loggedUser: req.user[0],
+    loggedUser,
     onlineUsers
   });
 
@@ -47,7 +80,7 @@ app.get('/', async function(req, res){
 });
 
 app.get('/chat', async function(req, res){
-  let onlineUsers = await db.findAllLoggedUsers();
+  let onlineUsers = await db.findAllLoggedUsers(req.user[0]._id);
 
   res.render('chat', {
     loggedUser: req.user[0],
@@ -56,7 +89,7 @@ app.get('/chat', async function(req, res){
 });
 
 app.get('/fetch/users', async function(req, res){
-  let onlineUsers = await db.findAllLoggedUsers();
+  let onlineUsers = await db.findAllLoggedUsers(req.user[0]._id);
   res.send(onlineUsers);
 });
 
@@ -65,7 +98,8 @@ io.on('connection', (socket) => {
 
   socket.on('user_connected', async (userId) => {
     await db.setSocketId(userId, socket.id);
-    let onlineUsers = await db.findAllLoggedUsers(); // to remove
+    // let onlineUsers = await db.findAllLoggedUsers(); // to remove
+    console.log("userId = " + userId);
     let updatedUserUsername = (await db.findById("users", userId, ["username"]))[0].username; // retrieve username
 
     io.emit('user_logged', {id: userId, username: updatedUserUsername});
@@ -84,8 +118,9 @@ io.on('connection', (socket) => {
   });
 
   socket.on('seen', async (data) => {
-    let receiver = (await db.findById("users", data.receiverId , ["socket_id"]))[0].socket_id; // retrieve socket_id
-    io.to(receiver).emit('seen', {receiverId: data.receiverId});
+    let sender = (await db.findById("users", data.senderId , ["socket_id"]))[0].socket_id; // retrieve socket_id
+    io.to(sender).emit('seen', {receiverId: data.receiverId});
+    await db.setSeenMessageStatus(data.senderId, data.receiverId);
   });
 
   socket.on('disconnect', () => {
