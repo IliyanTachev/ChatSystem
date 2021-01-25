@@ -5,11 +5,11 @@ jQuery(function(){
     username: $("#loggedUser").attr("data-username")
   };
 
-  var socket = io.connect('http://localhost:3000');
+  var socket = io.connect('http://localhost:3001');
   socket.emit('user_connected', loggedUser.id);
   socket.on('user_logged', (user) => {
     if(!checkIfUserAlreadyAdded(user.username)){
-        updateOnlineUsers(user);
+        updateOnlineUsers(user, loggedUser);
     }
 
     // Click on friend
@@ -36,9 +36,15 @@ jQuery(function(){
                 let style = loggedUser.username == messageObj.senderUsername ? 'style="display:flex;justify-content:flex-end;"' : ""; // Display loggedUser msgs on right
                 let messageLayout = '<div class="message-wrapper" ' + style + '>' +
                                         '<div><label class="username"><strong><i>' + messageObj.senderUsername + '</i></strong></label></div>' +
-                                        '<div><p class="message">' + messageObj.message + '</p></div>' +
+                                        '<div><p class="message new-response">' + messageObj.message + '</p></div>' +
                                     '</div>';
                 $(".chat-body").append(messageLayout);
+
+                // Add seen html
+                if(messageObj.seen_by_receiver == '1') {
+                  $(".chat-body .seen").remove();
+                  $(".chat-body").append("<p class='seen' style='color: blue;'>seen</p><br/>");
+                }
               });
 
               $(".chat-body").scrollTop($(".chat-body").prop("scrollHeight"));
@@ -76,8 +82,12 @@ jQuery(function(){
     let senderFriend = $(".friend[data-id='" + data.senderId + "']");
     if(senderFriend.hasClass("active")) {
       let senderUsername = senderFriend.attr("data-username");
-      let messageFormat = senderUsername + ": " + data.message;
-      $(".chat-body").append("<p class='new-response'>" + messageFormat + "</p>").append("<br/>");
+      let messageLayout = '<div class="message-wrapper">' +
+                                        '<div><label class="username"><strong><i>' + senderUsername + '</i></strong></label></div>' +
+                                        '<div><p class="message new-response">' + data.message + '</p></div>' +
+                                    '</div>';
+
+      $(".chat-body").append(messageLayout);
     } else {
       if(senderFriend.hasClass("unchecked")){
         let uncheckedMessagesNumber = Number(senderFriend.find(".unchecked-num").html());
@@ -92,17 +102,23 @@ jQuery(function(){
 
   // On seen
   socket.on('seen', (data) => {
-    $(".chat-window .seen").remove();
-    $(".chat-body").append("<p class='seen' style='color: blue;'>seen</p><br/>");
+    if($(".friend.active").attr("data-id") == data.receiverId){
+      $(".chat-body .seen").remove();
+      $(".chat-body").append("<p class='seen' style='color: blue;'>seen</p><br/>");
+    }
   });
 
-  $(".chat-window").click(function(){
+  $("section.chatSection").click(function(){
     if(
       $(".new-response").length &&
       $(".friend.active").length == 1
       ) { // if any responses and if any chat is opened 
       $(".new-response").removeClass("new-response").addClass("response");
-      socket.emit('seen', {receiverId: $(".friend.active").attr("data-id")});
+      $(".friend.active .unchecked-num").remove();
+      socket.emit('seen', {
+        senderId: $(".friend.active").attr("data-id"),
+        receiverId: loggedUser.id
+      });
     }
   });
 
@@ -169,10 +185,14 @@ jQuery(function(){
 });
 
 // Additional functions
-function updateOnlineUsers(user){
+function updateOnlineUsers(user, loggedUser){
   let onlineUsersWrapper = $(".contacts");
   let noOnlineUsersText = $("#default-li");
   onlineUsersWrapper.find(noOnlineUsersText).remove();
+
+  console.log("user.id = " + user.id);
+  console.log("loggedUser.id = " + loggedUser.id);
+  if(user.id == loggedUser.id) return;
 
   let onlineUserLayout = 
   '<div class="friend" data-id="' + user.id + '" data-username="' + user.username + '">' +
