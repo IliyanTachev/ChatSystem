@@ -126,13 +126,21 @@ jQuery(function(){
   roomParticipants = [];
 
   $("#new-room").click(function(){
-    $("#create-room-form-wrapper").show();
+    // $("#create-room-form-wrapper").show();
     $.ajax({
       url: '/fetch/users',
       method: 'GET',
       success: function(data){
         for(let onlineUser of data){
-          $("#create-room-form-wrapper > div#online-users").append('<button type="button" class="room-online-user btn btn-primary" data-id="' + onlineUser._id + '">' + onlineUser.username + '</button>');
+          // $("#create-room-form-wrapper > div#online-users").append('<button type="button" class="room-online-user btn btn-primary" data-id="' + onlineUser._id + '">' + onlineUser.username + '</button>');
+          if(!checkIfUserAlreadyDisplayedToGroup(onlineUser.username)){
+            $(".createGroupModalContentGrid .listOfFriends#all .allFriends").append(
+              '<div class="friendInList" data-id="' + onlineUser._id + '" data-username="' + onlineUser.username + '">' +
+                '<img class="friendInListImg" src="images/preview.jpeg" width="30px">' +
+                '<label class="friendInListName">' + onlineUser.username + '</label>' +
+              '</div>'
+            );
+          }
         }
 
 
@@ -184,6 +192,18 @@ jQuery(function(){
   });
 });
 
+// Groups
+$('body').on("click", ".createGroupModalContentGrid .listOfFriends#all .allFriends > .friendInList", function(){
+  $(".createGroupModalContentGrid .listOfFriends#all .allFriends").remove($(this));
+  $(".createGroupModalContentGrid .listOfFriends#added .allFriends").append($(this));
+});
+
+$('body').on("click", ".createGroupModalContentGrid .listOfFriends#added .allFriends > .friendInList", function(){
+  $(".createGroupModalContentGrid .listOfFriends#added .allFriends").remove($(this));
+  $(".createGroupModalContentGrid .listOfFriends#all .allFriends").append($(this));
+});
+
+
 // Additional functions
 function updateOnlineUsers(user, loggedUser){
   let onlineUsersWrapper = $(".contacts");
@@ -207,6 +227,24 @@ function checkIfUserAlreadyAdded(username){
   let onlineUsersElements = $(".contacts .friend");
   for(let onlineUserElement of onlineUsersElements){
      if($(onlineUserElement).attr("data-username") == username) return true;
+  }
+
+  return false;
+}
+
+function checkIfUserAlreadyDisplayedToGroup(username){
+  let onlineUsersElementsAll = $(".createGroupModalContentGrid .listOfFriends#all .allFriends > .friendInList");
+  for(let onlineUserElement of onlineUsersElementsAll){
+     if($(onlineUserElementAll).attr("data-username") == username) {
+      return true;
+     }
+  }
+
+  let onlineUsersElementsAdded = $(".createGroupModalContentGrid .listOfFriends#added .allFriends > .friendInList");
+  for(let onlineUserElement of onlineUsersElementsAdded){
+     if($(onlineUserElementAdded).attr("data-username") == username) {
+      return true;
+     }
   }
 
   return false;
