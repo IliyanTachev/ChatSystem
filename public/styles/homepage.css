@@ -944,3 +944,10 @@ h3#loggedUser, h3#loggedUser > #username{
 .createGroupModalContentGrid .listOfFriends#all .allFriends > .friendInList:hover, .createGroupModalContentGrid .listOfFriends#added .allFriends > .friendInList:hover{
     cursor: pointer;
 }
+
+#new-room{
+    padding: 8px 5px;
+    display: grid;
+    grid-template-rows: 45px;
+    grid-template-columns: 45px 1fr;
+}

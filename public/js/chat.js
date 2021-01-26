@@ -35,7 +35,7 @@ jQuery(function(){
               messages.forEach(messageObj => {
                 let style = loggedUser.username == messageObj.senderUsername ? 'style="display:flex;justify-content:flex-end;"' : ""; // Display loggedUser msgs on right
                 let messageLayout = '<div class="message-wrapper" ' + style + '>' +
-                                        '<div><label class="username"><strong><i>' + messageObj.senderUsername + '</i></strong></label></div>' +
+                                        '<div><label class="username" style="padding-right:5px;"><strong><i>' + messageObj.senderUsername + '</i></strong></label></div>' +
                                         '<div><p class="message new-response">' + messageObj.message + '</p></div>' +
                                     '</div>';
                 $(".chat-body").append(messageLayout);
@@ -64,8 +64,8 @@ jQuery(function(){
 
     let style = 'style="display:flex;justify-content:flex-end;"';
     let messageLayout = '<div class="message-wrapper" ' + style + '>' +
-                            '<div><label class="username"><strong><i>' + loggedUser.username + '</i></strong></label></div>' +
-                            '<div><p class="message">' + message + '</p></div>' +
+                            '<div><label class="username" style="padding-right:5px;"><strong><i>' + loggedUser.username + ' </i></strong></label></div><br>' +
+                            '<div><p class="message"> ' + message + '</p></div>' +
                         '</div>';
 
     $(".chat-body").append(messageLayout); // Append message to current user's chat window
@@ -83,7 +83,7 @@ jQuery(function(){
     if(senderFriend.hasClass("active")) {
       let senderUsername = senderFriend.attr("data-username");
       let messageLayout = '<div class="message-wrapper">' +
-                                        '<div><label class="username"><strong><i>' + senderUsername + '</i></strong></label></div>' +
+                                        '<div><label class="username" style="padding-right:5px;"><strong><i>' + senderUsername + '</i></strong></label></div>' +
                                         '<div><p class="message new-response">' + data.message + '</p></div>' +
                                     '</div>';
 
