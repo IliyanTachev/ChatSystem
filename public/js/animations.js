@@ -1,22 +1,22 @@
 //let leftSidebarStyle = window.getComputedStyle(leftSidebar);
 const leftSidebar = document.querySelectorAll("aside")[0];
 const rightSidebar = document.querySelectorAll("aside")[1];
-
+ 
 const leftArrowDiv = document.querySelectorAll(".arrow")[0];
 const leftArrowImg = document.querySelectorAll(".arrow-img")[0];
-
+ 
 const rightArrowDiv = document.querySelectorAll(".arrow")[1];
 const rightArrowImg = document.querySelectorAll(".arrow-img")[1];
-
+ 
 let friendName = document.querySelectorAll(".friendName");
 let friend2Name = document.querySelectorAll(".friend2Name");
-
+ 
 let leftAddFriendImg = document.getElementById("leftPlusSign");
 let rightAddFriendImg = document.getElementById("rightPlusSign");
-
+ 
 let isLeftSidebarClosed = false;
 let isRightSidebarClosed = false;
-
+ 
 leftArrowDiv.addEventListener("click", () => {
     if(isLeftSidebarClosed){
         leftSidebar.style.gridColumn = "1/3";
@@ -56,7 +56,7 @@ leftArrowDiv.addEventListener("click", () => {
         }, 500);
     }
 });
-
+ 
 rightArrowDiv.addEventListener("click", () => {
     if(isRightSidebarClosed){
         rightSidebar.style.gridColumn = "4/6";
@@ -96,7 +96,7 @@ rightArrowDiv.addEventListener("click", () => {
         }, 500);
     }
 });
-
+ 
 function addOrRemoveStyleClassArray(array, addOrRemove, styleClass, fontSize) {
     if(addOrRemove == "add"){
         for(const node of array){
@@ -109,17 +109,3 @@ function addOrRemoveStyleClassArray(array, addOrRemove, styleClass, fontSize) {
         }
     }
 }
-
-/*for(let i = 0; i < 100000; i++){
-    console.log(i);
-    leftSidebar.style.marginRight = (Number(leftSidebar.style.marginRight.replace(/\D+$/g, "")) + i) + "px";
-}*/
-// for(let i = 0; i < 10; i++){
-//     setTimeout(helo, 3000);
-// }
-// function helo(){
-//     leftSidebar.style.marginRight = (Number(leftSidebar.style.marginRight.replace(/\D+$/g, "")) + 5) + "px";
-//     console.log(`leftSidebar.style.marginRight = ${leftSidebar.style.marginRight}`);
-// }
-
-

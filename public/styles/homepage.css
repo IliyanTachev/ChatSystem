@@ -4,7 +4,7 @@
     box-sizing: border-box;
     color: #b0b3b8;
 }
-
+ 
 main {
     font: 400 14px Arial;
     letter-spacing: 0.3px;
@@ -20,7 +20,7 @@ main {
     "Lsidebar . chatSection . Rsidebar"
     "Lsidebar . chatSection . Rsidebar";
 }
-
+ 
 button,
 .button {
     padding: 8px 20px;
@@ -31,7 +31,7 @@ button,
     outline: none;
     cursor: pointer;
 }
-
+ 
 input {
     padding: 10px 20px;
     background-color: #333;
@@ -41,20 +41,20 @@ input {
     outline: none;
     cursor: text;
 }
-
+ 
 a {
     color: #fff;
     text-decoration: none;
 }
-
+ 
 ::-webkit-scrollbar {
     display: none;
 }
-
+ 
 .blur {
     backdrop-filter: blur(1px);
 }
-
+ 
 .header {
     grid-area: header;
     position: relative;
@@ -70,15 +70,15 @@ a {
     grid-template-areas: 
     "logo logo-nav-separator nav sBar sBar";
 }
-
+ 
 .header > div, .header > section {
     display: inline-block;
 }
-
+ 
 .logo {
     grid-area: logo;
 }
-
+ 
 .logoImg {
     display: block;
     position: relative;
@@ -89,7 +89,7 @@ a {
     cursor: pointer;
     width: 60px;
 }
-
+ 
 .separator-border{
     display: block;
     position: relative;
@@ -101,11 +101,11 @@ a {
     border-width: 0 0 0 1px;
     box-shadow: -4px 0 5px -5px #000;
 }
-
+ 
 .nav{
     grid-area: nav;
 }
-
+ 
 .navFlex {
     display: inline-block;
     position: relative;
@@ -115,11 +115,75 @@ a {
     justify-content: space-between;
     margin: 0 25%;
 }
-
+ 
+.modal-slide-down-animation {
+    animation-name: slide-down;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+ 
+.modal-slide-right-animation {
+    animation-name: slide-right;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+ 
+.modal-slide-left-animation {
+    animation-name: slide-left;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+ 
+.accountGrid {
+    display: grid;
+    grid-template-rows: 1fr 3fr;
+    grid-template-columns: 0.5fr 0.5fr 1fr;
+    grid-template-areas:
+    "accPh accLabels accLabels"
+    "listOfFriends listOfFriends accBtns";
+}
+ 
+.accountPhoto {
+    grid-row: 1/2;
+    grid-column: 1/2;
+    grid-area: accPh;
+}
+ 
+.accountLabels {
+    grid-row: 1/2;
+    grid-column: 2/4;
+    grid-area: accLabels;
+    align-self: center;
+}
+ 
+.accountLabels > label{
+    display: block;
+    margin-bottom: 5px;
+}
+ 
+.accountButtons {
+    position: relative;
+    grid-area: accBtns;
+    height: 95%;
+    margin-top: 5%;
+}
+ 
+.accountButtons > * {
+    margin-bottom: 15px;
+}
+ 
+.accountButtons > button {
+    width: 100%;
+    display: block;
+}
+ 
 .sBar {
     grid-area: sBar;
 }
-
+ 
 .searchBarInput {
     display: block;
     position: relative;
@@ -129,11 +193,11 @@ a {
     top: 50%;
     transform: translateY(-50%);
 }
-
+ 
 .addFriend {
     grid-area: addFriend;
 }
-
+ 
 .addFriendBtn {
     display: block;
     position: relative;
@@ -143,7 +207,7 @@ a {
     transform: translateY(-50%);
     width: 80%;
 }
-
+ 
 .Lsidebar {
     grid-area: Lsidebar;
     grid-row: 2/6;
@@ -153,7 +217,7 @@ a {
     border-style: solid;
     border-width: 0 1px 0 0;
     box-shadow: 0 -1px 7px #000;
-
+ 
     display: grid;
     grid-template-rows: 63px 1fr;
     grid-template-columns: 9fr 1fr;
@@ -161,46 +225,46 @@ a {
     "contactsHeader contactsHeader"
     "contacts contacts";
 }
-
+ 
 .addFriendMarginDecrease {
     animation-name: addFriendMarginDecrease;
     animation-duration: 0.5s;
     animation-timing-function: ease-in-out;
     animation-fill-mode: forwards;
 }
-
+ 
 .addFriendMarginIncrease {
     animation-name: addFriendMarginIncrease;
     animation-duration: 0.5s;
     animation-timing-function: ease-in-out;
     animation-fill-mode: forwards;
 }
-
+ 
 .close-Lsidebar {
     animation-name: closeSidebar;
     animation-duration: 0.5s;
     animation-timing-function: ease-in-out;
     animation-fill-mode: forwards;
 }
-
+ 
 .open-Lsidebar {
     animation-name: openSidebar;
     animation-duration: 0.5s;
     animation-timing-function: ease-in-out;
     animation-fill-mode: forwards;
 }
-
+ 
 .contacts {
     grid-row: 2/3;
     grid-column: 1/2;
     overflow-y:auto;
 }
-
+ 
 .contactsHeader {
     grid-row: 1/2;
     grid-column: 1/3;
 }
-
+ 
 .addFriendModalWindow {
     display: none;
     position: fixed;
@@ -213,7 +277,7 @@ a {
     background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.6);
 }
-
+ 
 .addFriendModalWindowContent {
     height: 50%;
     background-color: rgb(22, 22, 22);
@@ -223,7 +287,7 @@ a {
     border-radius: 1rem;
     width: 35%;
 }
-
+ 
 .addFriendModalContentGrid {
     display: grid;
     grid-template-rows: 2fr 1fr;
@@ -232,7 +296,7 @@ a {
     "username Id"
     "sendFriendRequest sendFriendRequest";
 }
-
+ 
 .lineInput {
     border: none;
     border-radius: 0;
@@ -241,12 +305,12 @@ a {
     padding: 2px 5px;
     font-size: 16px;
 }
-
+ 
 .lineInput:active,
 .lineInput:focus {
     border-bottom: 2px solid #ccc;
 }
-
+ 
 .username {
     grid-area: username;
     grid-row: 1/2;
@@ -255,11 +319,11 @@ a {
     align-self: center;
     width: 100%;
 }
-
+ 
 .usernameInput {
     width: 90%;
 }
-
+ 
 .Id {
     grid-area: Id;
     grid-row: 1/2;
@@ -268,11 +332,11 @@ a {
     align-self: center;
     width: 100%;
 }
-
+ 
 .IdInput {
     width: 80%;
 }
-
+ 
 .sendFriendRequest {
     grid-area: sendFriendRequest;
     grid-row: 2/3;
@@ -282,24 +346,24 @@ a {
     align-self: center;
     width: 20%;
 }
-
+ 
 .sendFriendRequestBtn {
     border-radius: 0;
     background-color: #161616;
     border-bottom: 2px solid rgb(75, 75, 75);
 }
-
+ 
 .sendFriendRequestBtn:hover {
     background-color: #2f2f2f;
     border-bottom: 2px solid #ccc;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
 }
-
+ 
 .sendFriendRequestBtn:active {
     background-color: #222222;
 }
-
+ 
 .errorMessage {
     opacity: 0;
     grid-row: 2/3;
@@ -314,28 +378,28 @@ a {
     width: 70%;
     height: 100%;
 }
-
+ 
 .showAlert {
     animation-name: opacity0to1;
     animation-duration: 5s;
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;
 }
-
+ 
 .hideAlert {
     animation-name: opacity1to0;
     animation-duration: 1s;
     animation-timing-function: ease-in;
     animation-fill-mode: forwards;
 }
-
+ 
 .showAndCloseAlert {
     animation-name: opacity0to1to0;
     animation-duration: 4s;
     animation-timing-function: ease-in-out;
     /* animation-fill-mode: forwards; */
 }
-
+ 
 .errorMessageDivWrapper{
     height: 100%;
     width: 100%;
@@ -343,7 +407,7 @@ a {
     grid-template-rows: 1fr;
     grid-template-columns: 1fr 9fr;
 }
-
+ 
 .errorMsgWrapper{
     position: relative;
     display: inline-block;
@@ -352,14 +416,14 @@ a {
     justify-self: start;
     align-self: center;
 }
-
+ 
 .errorMsg {
     color: #D8000C;
     font-size: 14px;
     font-weight: 600;
     position: relative;
 }
-
+ 
 .errorImgWrapper {
     display: inline-block;
     position: relative;
@@ -372,7 +436,7 @@ a {
     justify-self: center;   
     align-self: center;
 }
-
+ 
 .modalCloseBtn {
     grid-row: 1/2;
     grid-column: 2/3;
@@ -390,15 +454,14 @@ a {
     text-decoration: none;
     cursor: pointer;
 }
-
+ 
 .friend {
     padding: 8px 5px;
     display: grid;
     grid-template-rows: 45px;
     grid-template-columns: 45px 1fr;
-    position: relative;
 }
-
+ 
 .group {
     position: relative;
     padding: 8px 5px;
@@ -407,46 +470,37 @@ a {
     grid-template-columns: 45px 1fr;
     margin-left: 24px;
 }
-
-/* New group */
-#new-room{ 
-    padding: 8px 5px;
-    display: grid;
-    grid-template-rows: 45px;
-    grid-template-columns: 45px 1fr;
-    position: relative;
-}
-
+ 
 .friendImg {
     grid-row: 1/2;
     grid-column: 1/2;
     z-index: 2;
 }
-
+ 
 .friendName {
     grid-row: 1/2;
     grid-column: 2/3;
     align-self: center;
     margin-left: 10px;
-
+ 
     font: 400 14.53px Arial;
     color: #e4e6eb;
 }
-
+ 
 .friendNameSmollAnimation {
     animation-name: friendNameSmoll;
     animation-duration: 0.5s;
     animation-timing-function: ease-in-out;
     animation-fill-mode: forwards;
 }
-
+ 
 .friendNameBigAnimation {
     animation-name: friendNameBig;
     animation-duration: 0.5s;
     animation-timing-function: ease-in-out;
     animation-fill-mode: forwards;
 }
-
+ 
 .arrow {
     z-index: 2;
     opacity: 15%;
@@ -457,39 +511,39 @@ a {
     border-style: solid;
     cursor: pointer;
 }
-
+ 
 .arrow:hover {
     opacity: 100%;
 }
-
+ 
 .arrowOpacityDecrease {
     animation-name: opacityDecrease;
     animation-duration: 0.5s;
     animation-timing-function: linear;
     animation-fill-mode: forwards;
 }
-
+ 
 .arrow-img{
     display: block;
     position: relative;
     top: 30%;
     transform: translateY(-50%);
 }
-
+ 
 .rotateArrowClose {
     animation-name: rotateArrowClose;
     animation-duration: 0.5s;
     animation-timing-function: ease;
     animation-fill-mode: forwards;
 }
-
+ 
 .rotateArrowOpen {
     animation-name: rotateArrowOpen;
     animation-duration: 0.5s;
     animation-timing-function: ease;
     animation-fill-mode: forwards;
 }
-
+ 
 .chatSection {
     grid-area: chatSection;
     width: 80%;
@@ -502,7 +556,7 @@ a {
     border-top-left-radius: 1rem;
     border-width: 1px 1px 0 1px;
     box-shadow: 0 0 15px #000;
-
+ 
     display: grid;
     grid-template-rows: 1fr 8fr 1fr;
     grid-template-columns: 1fr;
@@ -511,31 +565,31 @@ a {
     "."
     "currMessage";
 }
-
+ 
 .chatOpt {
     grid-area: chatOpt;
     display: grid;
     margin: 1rem;
     justify-self: center;
 }
-
+ 
 .currnetChatAccDiv {
     justify-self: start;
     align-self: center;
 }
-
+ 
 .currMessage {
     grid-area: currMessage;
     display: grid;
     margin: 1rem;
     justify-self: center;
 }
-
+ 
 .currnetMessageDiv{
     justify-self: start;
     align-self: center;
 }
-
+ 
 .Rsidebar {
     grid-area: Rsidebar;
     grid-row: 2/6;
@@ -547,7 +601,7 @@ a {
     border-style: solid;
     border-width: 0 0 0 1px;
     box-shadow: 0 0 7px #000;
-
+ 
     display: grid;
     grid-template-rows: 63px 1fr;
     grid-template-columns: 1fr 9fr;
@@ -555,26 +609,26 @@ a {
     "groupsHeader groupsHeader"
     "groups groups";
 }
-
+ 
 .groupsHeader {
     grid-row: 1/2;
     grid-column: 1/3;
 }
-
+ 
 .createGroupModalContentGrid {
     height: 100%;
     display: grid;
     grid-template-rows: 1fr 1.5fr 1fr 5.5fr 1fr;
     grid-template-columns: 5fr 5fr;
 }
-
+ 
 .groupName {
     grid-row: 1/2;
     grid-column: 1/2;
     justify-self: center;
     align-self: center;
 }
-
+ 
 .listOfFriends {
     justify-self: center;
     align-self: center;
@@ -585,18 +639,18 @@ a {
     border-radius: 1rem;
     border: 1px solid #888;
     overflow-y: auto;
-
+ 
     display: grid;
     grid-template-rows: 50px 1fr;
     grid-template-columns: 1fr;
 }
-
+ 
 .allFriendsHeader {
     grid-row: 1/2;
     grid-column: 1/2;
     width: 100%;
 }
-
+ 
 .allFriendsHeaderLabel {
     display: block;
     position: relative;
@@ -605,14 +659,14 @@ a {
     color: #6d6d6d;
     font: 600 13.35px Arial;
 }
-
+ 
 .allFriendsHeaderBottomBroder {
     height: 20px;
     border-top: 1px solid #888;
     border-top-left-radius: 1rem;
     background-color: transparent;
 }
-
+ 
 .allFriends {
     grid-row: 1/3;
     grid-column: 1/2;
@@ -621,7 +675,7 @@ a {
     margin-bottom: 2px;
     overflow-y: auto;
 }
-
+ 
 .friendInList {
     display: grid;
     grid-template-rows: 1fr;
@@ -635,12 +689,12 @@ a {
     border: none;
     border-bottom: 2px solid #252525;
 }
-
+ 
 .friendInListImg {
     grid-row: 1/2;
     grid-column: 1/2;
 }
-
+ 
 .friendInListName {
     grid-row: 1/2;
     grid-column: 2/3;
@@ -648,7 +702,7 @@ a {
     justify-self: start;
     align-self: center;
 }
-
+ 
 .groupPhotoWrapper{
     width: 45%;
     height: 90%;
@@ -658,7 +712,7 @@ a {
     justify-self: center;
     align-self: center;
 }
-
+ 
 .groupPhoto {
     grid-row: 1/3;
     grid-column: 2/3;
@@ -672,58 +726,58 @@ a {
     border: 2px solid #454dba;
     /* border: 2px solid rgb(28, 31, 74); */
 }
-
+ 
 .changeGroupPhoto {
     grid-row: 3/4;
     grid-column: 2/3;
     justify-self: center;
     align-self: center;
 }
-
+ 
 /* .listOfAddedFriends {
     grid-row: 4/5;
     grid-column: 2/3;
     justify-self: center;
     align-self: center;
 } */
-
+ 
 .createGroupBtn {
     grid-row: 5/6;
     grid-column: 2/3;
     justify-self: center;
     align-self: center;
 }
-
+ 
 .groups {
     grid-row: 2/3 !important;
     grid-column: 1/3 !important;
     overflow-y:auto;
 }
-
+ 
 .friend2Name {
     grid-row: 1/2;
     grid-column: 2/3;
     align-self: center;
     margin-left: 10px;
-
+ 
     font: 400 14.53px Arial;
     color: #e4e6eb;
 }
-
+ 
 .close-Rsidebar {
     animation-name: closeSidebar;
     animation-duration: 0.5s;
     animation-timing-function: ease-in-out;
     animation-fill-mode: forwards;
 }
-
+ 
 .open-Rsidebar {
     animation-name: openSidebar;
     animation-duration: 0.5s;
     animation-timing-function: ease-in-out;
     animation-fill-mode: forwards;
 }
-
+ 
 @keyframes closeSidebar {
     0% {width: 100%;}
     100%{width: 25%;}
@@ -777,11 +831,28 @@ a {
     80%{opacity: 1;}
     100%{opacity: 0;}
 }
-
+@keyframes slide-down {
+    0%{margin: -100% auto;}
+    80%{margin: 10% auto;}
+    100%{margin: 6% auto;}
+}
+@keyframes slide-right {
+    0%{margin: 10% -100%;}
+    70%{margin: 10% 40%;}
+    90%{margin: 10% 32%;}
+    100%{margin: 10% auto;}
+}
+@keyframes slide-left {
+    0%{margin: 6% 150%;}
+    70%{margin: 6% 25%;}
+    90%{margin: 6% 33%;}
+    100%{margin: 6% auto;}
+}
+ 
 .friend:hover{
     cursor: pointer;
 }
-
+ 
 .friendName {
     pointer-events: none;
 }
