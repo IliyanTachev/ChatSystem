@@ -43,7 +43,7 @@ jQuery(function(){
                 // Add seen html
                 if(messageObj.seen_by_receiver == '1') {
                   $(".chat-body .seen").remove();
-                  $(".chat-body").append("<p class='seen' style='color: blue;'>seen</p><br/>");
+                  $(".chat-body").append("<p class='seen' style='color: blue;display:flex;justify-content:flex-end;'>seen</p><br/>");
                 }
               });
 
@@ -104,7 +104,7 @@ jQuery(function(){
   socket.on('seen', (data) => {
     if($(".friend.active").attr("data-id") == data.receiverId){
       $(".chat-body .seen").remove();
-      $(".chat-body").append("<p class='seen' style='color: blue;'>seen</p><br/>");
+      $(".chat-body").append("<p class='seen' style='color: blue;display:flex;justify-content:flex-end;'>seen</p><br/>");
     }
   });
 
@@ -123,7 +123,6 @@ jQuery(function(){
   });
 
   // Rooms
-  roomParticipants = [];
 
   $("#new-room").click(function(){
     // $("#create-room-form-wrapper").show();
@@ -143,35 +142,29 @@ jQuery(function(){
           }
         }
 
-
-        $(".room-online-user").click(function(){
-          if($(this).hasClass("chosen")){
-            $(this).removeClass("btn-success").addClass("btn-primary"); // styling
-            $(this).removeClass("chosen");
-            // Remove participant from room
-            let id = $(this).attr("data-id");
-            for(let i=0;i<roomParticipants.length;i++) {
-              if(roomParticipants[i] == id) {roomParticipants.splice(i, 1); break};
-            }
-          } else {
-            $(this).removeClass("btn-primary").addClass("btn-success"); // styling
-            $(this).addClass("chosen");
-            roomParticipants.push($(this).attr("data-id"));
+        $(".createGroupBtn").click(function(){
+          let roomName = $("#createGroupModal .groupName").val();
+          let roomParticipants = [];
+          for(let friendInGroup of $(".createGroupModalContentGrid .listOfFriends#added .allFriends .friendInList")){
+            roomParticipants.push($(friendInGroup).attr("data-id"));
           }
-        });
 
-
-        $("#create-room-form-wrapper #create-room").click(function(){
-          let roomName = $("#room-name").val();
+          console.log("ids (room) = " + roomParticipants);
 
           $.ajax({
             url: '/create/room',
             method: 'POST',
-            data: {roomName, participants: roomParticipants},
+            data: {roomName, roomAdminId: loggedUser.id, participants: roomParticipants},
             success: function(data){
-              if(data == "success"){
-                $("#create-room-form-wrapper").hide();
-                alert("You successfully created new group.");
+              let response = JSON.parse(data);
+              if(response.status == "success"){
+                let roomLayout = 
+                '<div class="group" data-id="' + response.createdRoomId + '">' +
+                  '<img class="friendImg" src="images/preview.jpeg" width="45px">' +
+                  '<label class="friendName">' + response.roomName + '</label>' +
+                '</div';
+
+                $(".groups").append(roomLayout);
               }
             }
           });
@@ -179,16 +172,6 @@ jQuery(function(){
 
       }
     });
-  });
-
-  socket.on('added_to_new_room', (data) => {
-    let roomLayout = 
-    '<div class="friend">' +
-      '<img class="friendImg" src="images/preview.jpeg" width="45px">' +
-      '<label data-name="' + data.roomName + '" class="friendName">' + data.roomName + '</label>' +
-    '</div';
-
-    $(".groups").append(roomLayout);
   });
 });
 
@@ -235,14 +218,14 @@ function checkIfUserAlreadyAdded(username){
 function checkIfUserAlreadyDisplayedToGroup(username){
   let onlineUsersElementsAll = $(".createGroupModalContentGrid .listOfFriends#all .allFriends > .friendInList");
   for(let onlineUserElement of onlineUsersElementsAll){
-     if($(onlineUserElementAll).attr("data-username") == username) {
+     if($(onlineUserElement).attr("data-username") == username) {
       return true;
      }
   }
 
   let onlineUsersElementsAdded = $(".createGroupModalContentGrid .listOfFriends#added .allFriends > .friendInList");
   for(let onlineUserElement of onlineUsersElementsAdded){
-     if($(onlineUserElementAdded).attr("data-username") == username) {
+     if($(onlineUserElement).attr("data-username") == username) {
       return true;
      }
   }

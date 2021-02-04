@@ -131,15 +131,20 @@ io.on('connection', (socket) => {
 // Create new room
 app.post('/create/room', async function(req, res){
   let roomName = req.body.roomName;
-  let fetchedSocketIds = (await db.findAllUsersByIds(req.body.participants, "socket_id")).map(userObj => userObj.socket_id);
-  
-  for(let socketId of fetchedSocketIds){
-    io.sockets.sockets.get(socketId).join(roomName);
+  let roomAdmin = req.body.roomAdminId;
+  let roomParticipants =  (req.body.participants).push(roomAdmin);
+
+  let fetchedUsers = (await db.findAllUsersByIds(roomParticipants, ["socket_id", "username"]));
+  console.log(JSON.stringify(fetchedUsers));
+
+  let createdRoomId = await db.createRoom(roomName, roomAdmin, roomParticipants, fetchedUsers.map(u => u.username));
+
+  for(let user of fetchedUsers){
+    io.sockets.sockets.get(user.socket_id).join(createdRoomId);
   }
 
-  io.to(roomName).emit("added_to_new_room", {roomName});
-
-  res.send("success")
+  let createdRoomData = {roomName, createdRoomId};
+  res.json(JSON.stringify(createdRoomData));
 });
 
 app.post('/fetch/messages', async function(req, res){
